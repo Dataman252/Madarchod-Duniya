@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Audiophile Space - HQPlayer Edition</title>
+    <title>Aura Audiophile Space</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -65,10 +65,7 @@
             justify-content: center;
         }
 
-        #clock-card {
-            padding: 0.6rem 1.1rem;
-            min-width: 148px;
-        }
+        #clock-card { padding: 0.6rem 1.1rem; min-width: 148px; }
 
         #clock-time {
             font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -76,22 +73,11 @@
             font-weight: 300;
             letter-spacing: 1.5px;
             line-height: 1.05;
-            color: var(--text-main);
             font-variant-numeric: tabular-nums;
         }
 
-        #clock-time .seconds {
-            font-size: 0.85rem;
-            color: var(--primary);
-            margin-left: 2px;
-        }
-
-        #clock-time .meridiem {
-            font-size: 0.7rem;
-            color: var(--text-sub);
-            margin-left: 4px;
-            letter-spacing: 1px;
-        }
+        #clock-time .seconds { font-size: 0.85rem; color: var(--primary); margin-left: 2px; }
+        #clock-time .meridiem { font-size: 0.7rem; color: var(--text-sub); margin-left: 4px; letter-spacing: 1px; }
 
         #clock-date {
             font-size: 0.63rem;
@@ -102,17 +88,12 @@
             font-weight: 600;
         }
 
-        #online-card {
-            padding: 0.6rem 0.9rem;
-            min-width: 74px;
-            cursor: default;
-        }
+        #online-card { padding: 0.6rem 0.9rem; min-width: 74px; cursor: default; }
 
         #online-count {
             font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
             font-size: 1.15rem;
             font-weight: 600;
-            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -120,19 +101,14 @@
         }
 
         .pulse-dot {
-            width: 7px;
-            height: 7px;
+            width: 7px; height: 7px;
             border-radius: 50%;
             background: #10b981;
             box-shadow: 0 0 8px #10b981;
             animation: pulse 2s ease-in-out infinite;
         }
 
-        .pulse-dot.offline {
-            background: var(--text-muted);
-            box-shadow: none;
-            animation: none;
-        }
+        .pulse-dot.offline { background: var(--text-muted); box-shadow: none; animation: none; }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -151,10 +127,8 @@
         /* ---------- Sidebar ---------- */
         #sidebar {
             position: fixed;
-            top: 0;
-            left: -320px;
-            width: 320px;
-            height: 100vh;
+            top: 0; left: -320px;
+            width: 320px; height: 100vh;
             background: rgba(12, 12, 12, 0.5);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -178,21 +152,14 @@
             padding-bottom: 0.75rem;
         }
 
-        .sidebar-header h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
+        .sidebar-header h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.3px; }
 
         .close-sidebar-btn {
-            background: none;
-            border: none;
+            background: none; border: none;
             color: var(--text-sub);
-            font-size: 1.2rem;
-            cursor: pointer;
+            font-size: 1.2rem; cursor: pointer;
             transition: color 0.2s;
         }
-
         .close-sidebar-btn:hover { color: #ef4444; }
 
         .sidebar-section-title {
@@ -205,12 +172,7 @@
             font-weight: 700;
         }
 
-        .playlists-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
+        .playlists-container { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
 
         .playlist-tab {
             padding: 0.75rem 1rem;
@@ -226,36 +188,17 @@
             transition: all 0.2s;
         }
 
-        .playlist-tab:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.08);
-        }
+        .playlist-tab:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); }
+        .playlist-tab.active { background: rgba(192,132,252,0.1); border-color: rgba(192,132,252,0.2); color: var(--primary); }
 
-        .playlist-tab.active {
-            background: rgba(192, 132, 252, 0.1);
-            border-color: rgba(192, 132, 252, 0.2);
-            color: var(--primary);
-        }
-
-        #library {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            overflow-y: auto;
-            flex-grow: 1;
-            padding-right: 0.25rem;
-        }
-
+        #library { display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; flex-grow: 1; padding-right: 0.25rem; }
         #library::-webkit-scrollbar { width: 4px; }
-        #library::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
+        #library::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
         .track {
             cursor: pointer;
             padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.01);
+            background: rgba(255,255,255,0.01);
             border: 1px solid transparent;
             border-radius: 10px;
             display: flex;
@@ -264,64 +207,32 @@
             transition: all 0.2s ease;
         }
 
-        .track:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
+        .track:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.06); }
+        .track.active { background: rgba(192,132,252,0.08); border-color: rgba(192,132,252,0.18); }
 
-        .track.active {
-            background: rgba(192, 132, 252, 0.08);
-            border-color: rgba(192, 132, 252, 0.18);
-        }
-
-        .track-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
-            max-width: 85%;
-        }
-
-        .track-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .track-artist {
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .track-info { display: flex; flex-direction: column; gap: 0.15rem; max-width: 85%; }
+        .track-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-artist { font-size: 0.75rem; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .play-indicator-dot {
-            width: 6px;
-            height: 6px;
+            width: 6px; height: 6px;
             background: var(--primary);
             border-radius: 50%;
             display: none;
             box-shadow: 0 0 8px var(--primary);
         }
-
         .track.active .play-indicator-dot { display: block; }
 
         .sidebar-trigger {
             position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
-            background: rgba(10, 10, 10, 0.3);
+            top: 1.5rem; left: 1.5rem;
+            background: rgba(10,10,10,0.3);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border-glass);
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
             color: var(--text-main);
             font-size: 1.2rem;
             cursor: pointer;
@@ -330,20 +241,16 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .sidebar-trigger:hover {
-            transform: scale(1.08);
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--primary);
-        }
+        .sidebar-trigger:hover { transform: scale(1.08); background: rgba(255,255,255,0.08); color: var(--primary); }
 
         /* ---------- Bottom dock ---------- */
         #bottom-container {
             position: fixed;
-            bottom: 2.5rem;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 760px;
+            width: 92%;
+            max-width: 820px;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -361,41 +268,27 @@
             align-items: center;
             justify-content: space-between;
             gap: 1.5rem;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.35);
         }
 
-        .player-info-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            width: 220px;
-            flex-shrink: 0;
-        }
+        .player-info-container { display: flex; align-items: center; gap: 1rem; width: 220px; flex-shrink: 0; }
 
         .album-art-wrapper {
             position: relative;
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border-radius: 50%;
             overflow: hidden;
-            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border: 1.5px solid rgba(255,255,255,0.12);
             flex-shrink: 0;
             box-shadow: 0 6px 12px rgba(0,0,0,0.3);
             background: #111;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .album-art-wrapper i {
-            font-size: 1.25rem;
-            color: var(--text-sub);
-            position: absolute;
-        }
+        .album-art-wrapper i { font-size: 1.25rem; color: var(--text-sub); position: absolute; }
 
         .album-art-image {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             object-fit: cover;
             border-radius: 50%;
             animation: rotateDisk 12s linear infinite;
@@ -408,83 +301,39 @@
             to   { transform: rotate(360deg); }
         }
 
-        .track-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 0.1rem;
-            overflow: hidden;
-        }
+        .track-meta { display: flex; flex-direction: column; gap: 0.1rem; overflow: hidden; }
 
-        #now-playing-title {
-            font-size: 0.88rem;
-            font-weight: 700;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        #now-playing-artist {
-            font-size: 0.72rem;
-            color: var(--text-sub);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
+        #now-playing-title { font-size: 0.88rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #now-playing-artist { font-size: 0.72rem; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         #now-playing-artist.error { color: #f87171; }
 
-        .audio-controls-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 0.45rem;
-        }
-
-        .playback-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
+        .audio-controls-container { flex-grow: 1; display: flex; flex-direction: column; gap: 0.45rem; }
+        .playback-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 
         .control-btn {
-            background: none;
-            border: none;
+            background: none; border: none;
             color: var(--text-main);
-            font-size: 1rem;
-            cursor: pointer;
+            font-size: 1rem; cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px;
             border-radius: 50%;
         }
 
-        .control-btn:hover {
-            color: var(--primary);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
+        .control-btn:hover { color: var(--primary); background: rgba(255,255,255,0.04); }
         .control-btn.active { color: var(--primary); }
 
         .control-btn.play-pause {
             background: var(--primary);
             color: #000;
             font-size: 0.95rem;
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
         }
+        .control-btn.play-pause:hover { background: var(--primary-hover); transform: scale(1.05); }
 
-        .control-btn.play-pause:hover {
-            background: var(--primary-hover);
-            transform: scale(1.05);
-        }
-
-        .audiophile-toggle-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .dsp-toggle-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             color: var(--text-main);
             font-size: 0.72rem;
             font-weight: 600;
@@ -492,75 +341,31 @@
             border-radius: 20px;
             cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+            display: flex; align-items: center; gap: 0.4rem;
+            white-space: nowrap;
         }
 
-        .audiophile-toggle-btn.enabled {
-            background: rgba(192, 132, 252, 0.2);
+        .dsp-toggle-btn.enabled {
+            background: rgba(192,132,252,0.2);
             border-color: var(--primary);
             color: var(--primary);
-            box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);
+            box-shadow: 0 0 10px rgba(192,132,252,0.2);
         }
 
-        .seeker-row {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            width: 100%;
-        }
+        .dsp-toggle-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .time-label {
-            font-size: 0.68rem;
-            font-family: monospace;
-            color: var(--text-sub);
-            width: 35px;
-            text-align: center;
-        }
+        .seeker-row { display: flex; align-items: center; gap: 0.75rem; width: 100%; }
+        .time-label { font-size: 0.68rem; font-family: monospace; color: var(--text-sub); width: 35px; text-align: center; }
 
-        .seeker-bar-container {
-            flex-grow: 1;
-            position: relative;
-            height: 12px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
+        .seeker-bar-container { flex-grow: 1; position: relative; height: 12px; display: flex; align-items: center; cursor: pointer; }
 
-        .seeker-bar-bg {
-            position: absolute;
-            left: 0; right: 0;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 6px;
-            transition: height 0.1s;
-        }
-
-        .seeker-bar-buffered {
-            position: absolute;
-            left: 0;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.18);
-            border-radius: 6px;
-            width: 0%;
-            transition: height 0.1s;
-        }
-
-        .seeker-bar-progress {
-            position: absolute;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, #d8b4fe 100%);
-            border-radius: 6px;
-            width: 0%;
-            transition: height 0.1s;
-        }
+        .seeker-bar-bg { position: absolute; left: 0; right: 0; height: 4px; background: rgba(255,255,255,0.12); border-radius: 6px; transition: height 0.1s; }
+        .seeker-bar-buffered { position: absolute; left: 0; height: 4px; background: rgba(255,255,255,0.18); border-radius: 6px; width: 0%; transition: height 0.1s; }
+        .seeker-bar-progress { position: absolute; left: 0; height: 4px; background: linear-gradient(90deg, var(--primary) 0%, #d8b4fe 100%); border-radius: 6px; width: 0%; transition: height 0.1s; }
 
         .seeker-knob {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 10px; height: 10px;
             background: #fff;
             border-radius: 50%;
             left: 0%;
@@ -577,7 +382,7 @@
         .seeker-tooltip {
             position: absolute;
             bottom: 20px;
-            background: rgba(15, 15, 15, 0.9);
+            background: rgba(15,15,15,0.9);
             border: 1px solid var(--border-glass);
             border-radius: 4px;
             padding: 0.2rem 0.4rem;
@@ -591,66 +396,139 @@
             z-index: 100;
         }
 
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            margin-left: 0.5rem;
-            position: relative;
-        }
-
-        .volume-bar-container {
-            width: 60px;
-            height: 12px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .volume-bar {
-            width: 100%;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 3px;
-            position: relative;
-            transition: height 0.1s;
-        }
-
-        .volume-progress {
-            position: absolute;
-            left: 0; top: 0;
-            height: 100%;
-            width: 80%;
-            background: var(--text-main);
-            border-radius: 3px;
-        }
-
+        .volume-container { display: flex; align-items: center; gap: 0.4rem; margin-left: 0.5rem; position: relative; }
+        .volume-bar-container { width: 60px; height: 12px; display: flex; align-items: center; cursor: pointer; }
+        .volume-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.12); border-radius: 3px; position: relative; transition: height 0.1s; }
+        .volume-progress { position: absolute; left: 0; top: 0; height: 100%; width: 80%; background: var(--text-main); border-radius: 3px; }
         .volume-bar-container:hover .volume-bar { height: 5px; }
 
-        #audiophile-specs {
+        /* ---------- DSP panel ---------- */
+        #dsp-panel {
             background: var(--bg-glass);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--border-glass);
             border-radius: 16px;
-            padding: 0.75rem 1.25rem;
+            padding: 0.9rem 1.25rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            display: none;
+            gap: 1.25rem;
+            align-items: stretch;
+        }
+
+        #dsp-panel.open { display: flex; }
+
+        .dsp-col { display: flex; flex-direction: column; gap: 0.55rem; }
+        .dsp-col.eq { flex: 0 0 210px; }
+        .dsp-col.toggles { flex: 0 0 130px; justify-content: flex-start; }
+        .dsp-col.scope { flex: 1 1 auto; min-width: 0; }
+
+        .dsp-heading {
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .eq-row { display: flex; align-items: center; gap: 0.55rem; }
+        .eq-row label { font-size: 0.65rem; color: var(--text-sub); width: 42px; font-weight: 600; }
+
+        .eq-row input[type=range] {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 3px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.14);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .eq-row input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 6px rgba(192,132,252,0.6);
+            cursor: pointer;
+        }
+
+        .eq-row input[type=range]::-moz-range-thumb {
+            width: 11px; height: 11px;
+            border: none;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .eq-val {
+            font-family: monospace;
+            font-size: 0.62rem;
+            color: var(--secondary);
+            width: 40px;
+            text-align: right;
+        }
+
+        .mini-toggle {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.09);
+            color: var(--text-sub);
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.32rem 0.5rem;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .mini-toggle:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
+
+        .mini-toggle.on {
+            background: rgba(34,211,238,0.14);
+            border-color: rgba(34,211,238,0.45);
+            color: var(--secondary);
+        }
+
+        .mini-toggle .dot {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            flex-shrink: 0;
+        }
+        .mini-toggle.on .dot { background: var(--secondary); box-shadow: 0 0 6px var(--secondary); }
+
+        #scope-canvas {
+            width: 100%;
+            height: 74px;
+            display: block;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.22);
+        }
+
+        /* ---------- Spec bar (real values only) ---------- */
+        #spec-bar {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 0.7rem 1.25rem;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 1rem;
             box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .spec-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+        .spec-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 
         .spec-label {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-muted);
@@ -659,50 +537,30 @@
         }
 
         .spec-value {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-family: monospace;
             font-weight: 600;
             color: var(--primary);
         }
 
-        .hq-select {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--secondary);
-            font-family: monospace;
-            font-size: 0.72rem;
-            border-radius: 4px;
-            padding: 0.15rem 0.35rem;
-            outline: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            width: 95px;
-        }
-
-        .hq-select:hover {
-            border-color: var(--secondary);
-            background: rgba(34, 211, 238, 0.1);
-        }
+        .spec-value.dim { color: var(--text-muted); }
+        .spec-value.warn { color: #fbbf24; }
 
         .status-indicator {
             display: inline-block;
-            width: 6px;
-            height: 6px;
+            width: 6px; height: 6px;
             border-radius: 50%;
             background: #10b981;
             margin-right: 4px;
             box-shadow: 0 0 8px #10b981;
         }
+        .status-indicator.processing { background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .status-indicator.failed { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
 
-        .status-indicator.processing {
-            background: var(--primary);
-            box-shadow: 0 0 8px var(--primary);
-        }
-
-        .status-indicator.failed {
-            background: #ef4444;
-            box-shadow: 0 0 8px #ef4444;
+        @media (max-width: 860px) {
+            #dsp-panel { flex-wrap: wrap; }
+            .dsp-col.scope { flex: 1 1 100%; }
+            #spec-bar { grid-template-columns: repeat(3, 1fr); }
         }
 
         @media (max-width: 640px) {
@@ -718,7 +576,6 @@
         <i class="fa-solid fa-bars"></i>
     </button>
 
-    <!-- Clock + presence -->
     <div id="status-cluster">
         <div class="status-card" id="online-card" title="Listeners currently on this page">
             <div id="online-count"><span class="pulse-dot offline" id="online-dot"></span><span id="online-num">–</span></div>
@@ -786,50 +643,88 @@
                         </div>
                     </div>
 
-                    <button class="audiophile-toggle-btn" id="toggle-audiophile" title="Toggle Audiophile Upsampling Pipeline">
-                        <i class="fa-solid fa-microchip"></i> Audiophile Mode
+                    <button class="dsp-toggle-btn" id="toggle-dsp" title="Show the signal processing chain">
+                        <i class="fa-solid fa-sliders"></i> DSP
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="audiophile-specs" style="display: none;">
-            <div class="spec-item" id="spec-item-filter">
-                <span class="spec-label">Oversampling Filter</span>
-                <select class="hq-select" id="hq-filter">
-                    <option value="poly-sinc-xtr-lp">poly-sinc-xtr</option>
-                    <option value="poly-sinc-gauss">poly-sinc-gauss</option>
-                    <option value="min-phase">minimum phase</option>
-                    <option value="closed-form">closed-form</option>
-                    <option value="none">no filter</option>
-                </select>
+        <!-- Real signal processing controls -->
+        <div id="dsp-panel">
+            <div class="dsp-col eq">
+                <span class="dsp-heading">Equaliser</span>
+
+                <div class="eq-row">
+                    <label for="eq-bass">Bass</label>
+                    <input type="range" id="eq-bass" min="-12" max="12" step="0.5" value="0">
+                    <span class="eq-val" id="eq-bass-val">0.0 dB</span>
+                </div>
+
+                <div class="eq-row">
+                    <label for="eq-mid">Mid</label>
+                    <input type="range" id="eq-mid" min="-12" max="12" step="0.5" value="0">
+                    <span class="eq-val" id="eq-mid-val">0.0 dB</span>
+                </div>
+
+                <div class="eq-row">
+                    <label for="eq-treble">Treble</label>
+                    <input type="range" id="eq-treble" min="-12" max="12" step="0.5" value="0">
+                    <span class="eq-val" id="eq-treble-val">0.0 dB</span>
+                </div>
+
+                <div class="eq-row">
+                    <label for="eq-gain">Gain</label>
+                    <input type="range" id="eq-gain" min="-12" max="6" step="0.5" value="0">
+                    <span class="eq-val" id="eq-gain-val">0.0 dB</span>
+                </div>
             </div>
 
-            <div class="spec-item" id="spec-item-modulator">
-                <span class="spec-label">Modulator / SDM</span>
-                <select class="hq-select" id="hq-modulator">
-                    <option value="AMSDM7">AMSDM7 512fs</option>
-                    <option value="DSD512">DSD512 v2</option>
-                    <option value="NS9">NS9 Dither</option>
-                    <option value="LNS15">LNS15 Noise Shaper</option>
-                </select>
+            <div class="dsp-col toggles">
+                <span class="dsp-heading">Processing</span>
+                <button class="mini-toggle" id="tg-crossfeed" title="Bleeds a delayed, filtered copy of each channel into the other — reduces the hard left/right separation that makes headphones fatiguing">
+                    <span class="dot"></span> Crossfeed
+                </button>
+                <button class="mini-toggle" id="tg-compressor" title="Dynamic range compression — makes quiet passages louder for late-night listening">
+                    <span class="dot"></span> Night Mode
+                </button>
+                <button class="mini-toggle" id="tg-mono" title="Sums both channels to mono">
+                    <span class="dot"></span> Mono
+                </button>
+                <button class="mini-toggle" id="tg-reset" title="Reset all processing to flat">
+                    <span class="dot" style="background:transparent;box-shadow:none;"></span> Reset all
+                </button>
             </div>
 
+            <div class="dsp-col scope">
+                <span class="dsp-heading">Spectrum <span id="scope-note" style="text-transform:none;letter-spacing:0;color:var(--text-muted);"></span></span>
+                <canvas id="scope-canvas"></canvas>
+            </div>
+        </div>
+
+        <!-- Measured values only — nothing here is invented -->
+        <div id="spec-bar">
             <div class="spec-item">
-                <span class="spec-label">Resolution / Rate</span>
-                <span id="spec-samplerate" class="spec-value">44.1 kHz / 16-bit</span>
+                <span class="spec-label">Source Format</span>
+                <span id="spec-format" class="spec-value dim">—</span>
             </div>
-
             <div class="spec-item">
-                <span class="spec-label" id="spec-label-format">Output Engine</span>
-                <span id="spec-format" class="spec-value">PCM Bitperfect</span>
+                <span class="spec-label">Sample Rate / Depth</span>
+                <span id="spec-rate" class="spec-value dim">—</span>
             </div>
-
             <div class="spec-item">
-                <span class="spec-label">Engine State</span>
-                <span class="spec-value" style="color: #4ade80; display: flex; align-items: center;">
+                <span class="spec-label">Bitrate</span>
+                <span id="spec-bitrate" class="spec-value dim">—</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Output Mixer</span>
+                <span id="spec-output" class="spec-value dim">—</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Signal Path</span>
+                <span class="spec-value" style="display:flex;align-items:center;">
                     <span class="status-indicator" id="status-light"></span>
-                    <span id="spec-engine">OFFLINE</span>
+                    <span id="spec-path">IDLE</span>
                 </span>
             </div>
         </div>
@@ -844,8 +739,8 @@
         const PLAYLIST_API  = 'https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec';
         const DRIVE_API_KEY = 'AIzaSyCQKib3-SorQYL_eeiaNCpVxE-So6gIn_c';
 
-        const USE_24_HOUR  = false;   // flip to true for a 24-hour clock
-        const HEARTBEAT_MS = 25000;   // must stay under the script's 45s TTL
+        const USE_24_HOUR  = false;
+        const HEARTBEAT_MS = 25000;
 
         function streamUrlFor(track) {
             return `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${DRIVE_API_KEY}`;
@@ -871,28 +766,23 @@
 
             const hh = USE_24_HOUR ? String(h).padStart(2, '0') : String(h);
 
-            clockTime.innerHTML =
-                `${hh}:${m}<span class="seconds">${s}</span>` +
+            clockTime.innerHTML = `${hh}:${m}<span class="seconds">${s}</span>` +
                 (meridiem ? `<span class="meridiem">${meridiem}</span>` : '');
 
             clockDate.innerText = now.toLocaleDateString(undefined, {
                 weekday: 'short', day: 'numeric', month: 'short'
             });
         }
-
         tickClock();
         setInterval(tickClock, 1000);
 
         /* ============================================================
-           PRESENCE / ONLINE COUNT
+           PRESENCE
 
-           The heartbeat is sent as /exec?sid=uNNNNNNNNN — no `action`
-           parameter. Requests carrying action=presence were being
-           rejected with a 400 at Google's edge before reaching the
-           script (the Executions log showed every run Completed and
-           no CORS header came back), while the plain /exec route the
-           playlist uses has never failed. So the heartbeat rides that
-           same route and is identified by the sid parameter alone.
+           Parameter is `uid`, not `sid`. A parameter literally named
+           `sid` is rejected with a 400 at Google's edge before the
+           request reaches Apps Script — every value tested failed,
+           and adding it to a working URL broke that URL.
            ============================================================ */
         const onlineNum = document.getElementById('online-num');
         const onlineDot = document.getElementById('online-dot');
@@ -900,10 +790,10 @@
         function getSessionId() {
             let sid;
             try {
-                sid = sessionStorage.getItem('aura_sid');
-                if (!sid || sid.length > 12) {          // discard old long-format ids
+                sid = sessionStorage.getItem('aura_uid');
+                if (!sid) {
                     sid = 'u' + Math.floor(Math.random() * 1e9);
-                    sessionStorage.setItem('aura_sid', sid);
+                    sessionStorage.setItem('aura_uid', sid);
                 }
             } catch (e) {
                 sid = 'u' + Math.floor(Math.random() * 1e9);
@@ -915,24 +805,18 @@
         let presenceFailures = 0;
 
         async function sendHeartbeat() {
-            if (document.hidden) return;   // a backgrounded tab isn't a listener
+            if (document.hidden) return;
 
-            const url = `${PLAYLIST_API}?sid=${encodeURIComponent(SESSION_ID)}`;
+            const url = `${PLAYLIST_API}?uid=${encodeURIComponent(SESSION_ID)}`;
 
             try {
                 const res = await fetch(url);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
 
                 const data = await res.json();
+                if (Array.isArray(data)) throw new Error('uid route not deployed (got playlist array)');
 
-                // Guard against the playlist array coming back — that would
-                // mean the deployment predates the sid route.
-                if (Array.isArray(data)) {
-                    throw new Error('sid route not deployed (got playlist array)');
-                }
-
-                const n = Number(data.online) || 1;
-                onlineNum.innerText = n;
+                onlineNum.innerText = Number(data.online) || 1;
                 onlineDot.classList.remove('offline');
                 presenceFailures = 0;
 
@@ -941,7 +825,6 @@
             } catch (err) {
                 presenceFailures++;
                 console.warn(`[Aura] presence unavailable (${presenceFailures}):`, err.message, url);
-
                 if (presenceFailures >= 2) {
                     onlineNum.innerText = '–';
                     onlineDot.classList.add('offline');
@@ -951,12 +834,10 @@
 
         sendHeartbeat();
         setInterval(sendHeartbeat, HEARTBEAT_MS);
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) sendHeartbeat();
-        });
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) sendHeartbeat(); });
 
         /* ============================================================
-           PLAYER
+           ELEMENT REFS
            ============================================================ */
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -986,44 +867,532 @@
         const muteBtn = document.getElementById('btn-mute');
         const muteIcon = document.getElementById('mute-icon');
 
-        const toggleAudiophile = document.getElementById('toggle-audiophile');
-        const specsContainer = document.getElementById('audiophile-specs');
-        const specItemFilter = document.getElementById('spec-item-filter');
-        const specItemModulator = document.getElementById('spec-item-modulator');
-        const specLabelFormat = document.getElementById('spec-label-format');
+        const toggleDspBtn = document.getElementById('toggle-dsp');
+        const dspPanel = document.getElementById('dsp-panel');
+        const scopeCanvas = document.getElementById('scope-canvas');
+        const scopeNote = document.getElementById('scope-note');
 
         const specFormat = document.getElementById('spec-format');
-        const specSampleRate = document.getElementById('spec-samplerate');
-        const specEngine = document.getElementById('spec-engine');
+        const specRate = document.getElementById('spec-rate');
+        const specBitrate = document.getElementById('spec-bitrate');
+        const specOutput = document.getElementById('spec-output');
+        const specPath = document.getElementById('spec-path');
         const statusLight = document.getElementById('status-light');
-
-        const hqFilter = document.getElementById('hq-filter');
-        const hqModulator = document.getElementById('hq-modulator');
 
         let allTracks = [];
         let visibleTracks = [];
         let currentIndex = -1;
         let isShuffle = false;
-        let isAudiophileMode = false;
 
         sidebarToggle.onclick = () => sidebar.classList.add('open');
         sidebarClose.onclick = () => sidebar.classList.remove('open');
 
-        toggleAudiophile.onclick = () => {
-            isAudiophileMode = !isAudiophileMode;
-            toggleAudiophile.classList.toggle('enabled', isAudiophileMode);
-            specsContainer.style.display = 'grid';
-            specItemFilter.style.display = isAudiophileMode ? 'flex' : 'none';
-            specItemModulator.style.display = isAudiophileMode ? 'flex' : 'none';
-            specLabelFormat.innerText = isAudiophileMode ? "Output Engine" : "Playback Direct";
-            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
+        /* ============================================================
+           WEB AUDIO DSP CHAIN
+
+           Signal path:
+             <audio> -> MediaElementSource
+                     -> lowShelf (bass)
+                     -> peaking  (mid)
+                     -> highShelf(treble)
+                     -> crossfeed matrix (splitter/delay/lowpass/merger)
+                     -> compressor (transparent when off)
+                     -> analyser
+                     -> makeup gain
+                     -> destination
+
+           Routing an element through Web Audio requires CORS. If the
+           source is cross-origin without CORS headers the graph goes
+           SILENT rather than erroring, so we verify the audio is
+           actually non-silent after starting and fall back to plain
+           playback if it isn't.
+           ============================================================ */
+        let ctx = null;
+        let srcNode = null;
+        let bassNode, midNode, trebleNode;
+        let splitter, merger, delayL, delayR, cfLowL, cfLowR, cfGainL, cfGainR, directL, directR;
+        let compNode, analyser, makeupGain;
+        let dspReady = false;
+        let dspFailed = false;
+        let scopeRaf = null;
+
+        const dspState = {
+            bass: 0, mid: 0, treble: 0, gain: 0,
+            crossfeed: false, compressor: false, mono: false
         };
 
-        specsContainer.style.display = 'grid';
-        specItemFilter.style.display = 'none';
-        specItemModulator.style.display = 'none';
-        specLabelFormat.innerText = "Playback Direct";
+        function buildGraph() {
+            if (ctx) return true;
 
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) throw new Error('Web Audio not supported');
+
+                ctx = new AC();
+                srcNode = ctx.createMediaElementSource(audioEl);
+
+                // --- 3-band EQ ---
+                bassNode = ctx.createBiquadFilter();
+                bassNode.type = 'lowshelf';
+                bassNode.frequency.value = 120;
+
+                midNode = ctx.createBiquadFilter();
+                midNode.type = 'peaking';
+                midNode.frequency.value = 1000;
+                midNode.Q.value = 1.0;
+
+                trebleNode = ctx.createBiquadFilter();
+                trebleNode.type = 'highshelf';
+                trebleNode.frequency.value = 6000;
+
+                // --- Crossfeed matrix ---
+                // Each channel gets a delayed, low-passed copy of the
+                // other mixed in. ~270us and 700Hz approximate the
+                // interaural time difference and head shadowing that
+                // speakers produce naturally and headphones don't.
+                splitter = ctx.createChannelSplitter(2);
+                merger = ctx.createChannelMerger(2);
+
+                directL = ctx.createGain();
+                directR = ctx.createGain();
+                directL.gain.value = 1;
+                directR.gain.value = 1;
+
+                delayL = ctx.createDelay(0.01);
+                delayR = ctx.createDelay(0.01);
+                delayL.delayTime.value = 0.00027;
+                delayR.delayTime.value = 0.00027;
+
+                cfLowL = ctx.createBiquadFilter();
+                cfLowR = ctx.createBiquadFilter();
+                cfLowL.type = 'lowpass';
+                cfLowR.type = 'lowpass';
+                cfLowL.frequency.value = 700;
+                cfLowR.frequency.value = 700;
+
+                cfGainL = ctx.createGain();
+                cfGainR = ctx.createGain();
+                cfGainL.gain.value = 0;   // off until enabled
+                cfGainR.gain.value = 0;
+
+                // direct paths
+                splitter.connect(directL, 0);
+                splitter.connect(directR, 1);
+                directL.connect(merger, 0, 0);
+                directR.connect(merger, 0, 1);
+
+                // cross paths: L -> right output, R -> left output
+                splitter.connect(delayL, 0);
+                delayL.connect(cfLowL);
+                cfLowL.connect(cfGainL);
+                cfGainL.connect(merger, 0, 1);
+
+                splitter.connect(delayR, 1);
+                delayR.connect(cfLowR);
+                cfLowR.connect(cfGainR);
+                cfGainR.connect(merger, 0, 0);
+
+                // --- Compressor (transparent at ratio 1 / threshold 0) ---
+                compNode = ctx.createDynamicsCompressor();
+                compNode.threshold.value = 0;
+                compNode.knee.value = 30;
+                compNode.ratio.value = 1;
+                compNode.attack.value = 0.01;
+                compNode.release.value = 0.25;
+
+                analyser = ctx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.8;
+
+                makeupGain = ctx.createGain();
+                makeupGain.gain.value = 1;
+
+                srcNode.connect(bassNode);
+                bassNode.connect(midNode);
+                midNode.connect(trebleNode);
+                trebleNode.connect(splitter);
+                merger.connect(compNode);
+                compNode.connect(analyser);
+                analyser.connect(makeupGain);
+                makeupGain.connect(ctx.destination);
+
+                dspReady = true;
+                applyDspState();
+                updateOutputSpec();
+                return true;
+
+            } catch (err) {
+                console.error('[Aura] Web Audio graph failed:', err);
+                dspFailed = true;
+                dspReady = false;
+                return false;
+            }
+        }
+
+        function applyDspState() {
+            if (!dspReady) return;
+
+            bassNode.gain.value = dspState.bass;
+            midNode.gain.value = dspState.mid;
+            trebleNode.gain.value = dspState.treble;
+            makeupGain.gain.value = Math.pow(10, dspState.gain / 20);
+
+            const cf = dspState.crossfeed ? 0.5 : 0;
+            cfGainL.gain.value = cf;
+            cfGainR.gain.value = cf;
+
+            // Mono = full cross-mix at equal gain with the direct paths halved
+            if (dspState.mono) {
+                directL.gain.value = 0.5;
+                directR.gain.value = 0.5;
+                cfGainL.gain.value = 0.5;
+                cfGainR.gain.value = 0.5;
+                cfLowL.frequency.value = 20000;
+                cfLowR.frequency.value = 20000;
+                delayL.delayTime.value = 0;
+                delayR.delayTime.value = 0;
+            } else {
+                directL.gain.value = 1;
+                directR.gain.value = 1;
+                cfLowL.frequency.value = 700;
+                cfLowR.frequency.value = 700;
+                delayL.delayTime.value = 0.00027;
+                delayR.delayTime.value = 0.00027;
+            }
+
+            if (dspState.compressor) {
+                compNode.threshold.value = -24;
+                compNode.ratio.value = 6;
+            } else {
+                compNode.threshold.value = 0;
+                compNode.ratio.value = 1;
+            }
+
+            updatePathSpec();
+        }
+
+        function activeChainLabel() {
+            if (dspFailed) return 'DIRECT (no DSP)';
+            if (!dspReady) return 'DIRECT';
+
+            const parts = [];
+            if (dspState.bass || dspState.mid || dspState.treble) parts.push('EQ');
+            if (dspState.crossfeed) parts.push('XFEED');
+            if (dspState.compressor) parts.push('COMP');
+            if (dspState.mono) parts.push('MONO');
+            if (dspState.gain) parts.push('GAIN');
+
+            return parts.length ? parts.join(' + ') : 'FLAT (bypass)';
+        }
+
+        function updatePathSpec() {
+            specPath.innerText = audioEl.paused ? 'IDLE' : activeChainLabel();
+            if (dspFailed) {
+                statusLight.className = 'status-indicator failed';
+            } else if (!audioEl.paused) {
+                statusLight.className = 'status-indicator processing';
+            } else {
+                statusLight.className = 'status-indicator';
+            }
+        }
+
+        function updateOutputSpec() {
+            if (ctx) {
+                specOutput.classList.remove('dim');
+                specOutput.innerText = `${(ctx.sampleRate / 1000).toFixed(1)} kHz float32`;
+                specOutput.title = 'The browser mixes all audio at this rate. A web page cannot ' +
+                                   'take exclusive control of your DAC, so this is the real output rate ' +
+                                   'regardless of the source file.';
+            }
+        }
+
+        /* --- Silence detection: catches a CORS-tainted graph --- */
+        function verifyAudible() {
+            if (!dspReady) return;
+
+            const buf = new Uint8Array(analyser.frequencyBinCount);
+            let checks = 0;
+            let sawSignal = false;
+
+            const probe = setInterval(() => {
+                if (audioEl.paused) return;
+                analyser.getByteFrequencyData(buf);
+                let sum = 0;
+                for (let i = 0; i < buf.length; i++) sum += buf[i];
+                if (sum > 0) sawSignal = true;
+
+                if (++checks >= 10) {
+                    clearInterval(probe);
+                    if (!sawSignal && audioEl.currentTime > 0.5) {
+                        console.error('[Aura] Web Audio graph is silent — the source is likely ' +
+                                      'not sending CORS headers. Falling back to direct playback.');
+                        scopeNote.innerText = '(unavailable — CORS)';
+                        dspFailed = true;
+                        disableDspUi();
+                    }
+                }
+            }, 200);
+        }
+
+        function disableDspUi() {
+            ['eq-bass','eq-mid','eq-treble','eq-gain'].forEach(id => {
+                const el = document.getElementById(id);
+                el.disabled = true;
+                el.style.opacity = 0.35;
+            });
+            ['tg-crossfeed','tg-compressor','tg-mono'].forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.remove('on');
+                el.style.opacity = 0.35;
+                el.style.pointerEvents = 'none';
+            });
+            updatePathSpec();
+        }
+
+        /* --- Spectrum analyser --- */
+        const scopeCtx = scopeCanvas.getContext('2d');
+
+        function sizeCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = scopeCanvas.getBoundingClientRect();
+            if (rect.width === 0) return;
+            scopeCanvas.width = Math.floor(rect.width * dpr);
+            scopeCanvas.height = Math.floor(rect.height * dpr);
+            scopeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        window.addEventListener('resize', sizeCanvas);
+
+        function drawScope() {
+            scopeRaf = requestAnimationFrame(drawScope);
+            if (!dspReady || dspFailed || !dspPanel.classList.contains('open')) return;
+
+            const rect = scopeCanvas.getBoundingClientRect();
+            const w = rect.width, h = rect.height;
+            if (w === 0) return;
+
+            const bins = analyser.frequencyBinCount;
+            const data = new Uint8Array(bins);
+            analyser.getByteFrequencyData(data);
+
+            scopeCtx.clearRect(0, 0, w, h);
+
+            // Log-spaced bars so the display matches how we hear pitch
+            const bars = 56;
+            const gap = 1.5;
+            const barW = (w - gap * (bars - 1)) / bars;
+            const nyquist = ctx.sampleRate / 2;
+            const minF = 30, maxF = Math.min(18000, nyquist);
+
+            for (let i = 0; i < bars; i++) {
+                const f0 = minF * Math.pow(maxF / minF, i / bars);
+                const f1 = minF * Math.pow(maxF / minF, (i + 1) / bars);
+                const b0 = Math.floor(f0 / nyquist * bins);
+                const b1 = Math.max(b0 + 1, Math.floor(f1 / nyquist * bins));
+
+                let peak = 0;
+                for (let b = b0; b < b1 && b < bins; b++) if (data[b] > peak) peak = data[b];
+
+                const mag = peak / 255;
+                const barH = Math.max(1.5, mag * h);
+                const x = i * (barW + gap);
+                const y = h - barH;
+
+                const grad = scopeCtx.createLinearGradient(0, h, 0, y);
+                grad.addColorStop(0, 'rgba(192,132,252,0.85)');
+                grad.addColorStop(1, 'rgba(34,211,238,0.95)');
+                scopeCtx.fillStyle = grad;
+
+                scopeCtx.beginPath();
+                if (scopeCtx.roundRect) scopeCtx.roundRect(x, y, barW, barH, 1.5);
+                else scopeCtx.rect(x, y, barW, barH);
+                scopeCtx.fill();
+            }
+        }
+
+        /* --- DSP UI wiring --- */
+        function bindSlider(id, key, suffix) {
+            const el = document.getElementById(id);
+            const out = document.getElementById(id + '-val');
+            el.addEventListener('input', () => {
+                dspState[key] = parseFloat(el.value);
+                out.innerText = dspState[key].toFixed(1) + ' ' + suffix;
+                if (!ctx) buildGraph();
+                applyDspState();
+            });
+        }
+
+        bindSlider('eq-bass', 'bass', 'dB');
+        bindSlider('eq-mid', 'mid', 'dB');
+        bindSlider('eq-treble', 'treble', 'dB');
+        bindSlider('eq-gain', 'gain', 'dB');
+
+        function bindToggle(id, key) {
+            const el = document.getElementById(id);
+            el.addEventListener('click', () => {
+                if (!ctx) buildGraph();
+                dspState[key] = !dspState[key];
+                el.classList.toggle('on', dspState[key]);
+                applyDspState();
+            });
+        }
+
+        bindToggle('tg-crossfeed', 'crossfeed');
+        bindToggle('tg-compressor', 'compressor');
+        bindToggle('tg-mono', 'mono');
+
+        document.getElementById('tg-reset').addEventListener('click', () => {
+            dspState.bass = dspState.mid = dspState.treble = dspState.gain = 0;
+            dspState.crossfeed = dspState.compressor = dspState.mono = false;
+
+            [['eq-bass','bass'],['eq-mid','mid'],['eq-treble','treble'],['eq-gain','gain']].forEach(([id,k]) => {
+                document.getElementById(id).value = 0;
+                document.getElementById(id + '-val').innerText = '0.0 dB';
+            });
+            ['tg-crossfeed','tg-compressor','tg-mono'].forEach(id =>
+                document.getElementById(id).classList.remove('on'));
+
+            applyDspState();
+        });
+
+        toggleDspBtn.addEventListener('click', () => {
+            const open = dspPanel.classList.toggle('open');
+            toggleDspBtn.classList.toggle('enabled', open);
+            if (open) {
+                if (!ctx) buildGraph();
+                requestAnimationFrame(sizeCanvas);
+            }
+        });
+
+        /* ============================================================
+           REAL FILE METADATA
+
+           Reads the first 64 bytes over an HTTP Range request and
+           parses the FLAC STREAMINFO block for the true sample rate,
+           bit depth, channel count and total sample count. The
+           Content-Range header gives the file size, which with the
+           duration yields the real average bitrate.
+
+           No guessing, no filename heuristics.
+           ============================================================ */
+        async function readRealMetadata(track) {
+            const url = streamUrlFor(track);
+
+            try {
+                const res = await fetch(url, { headers: { Range: 'bytes=0-63' } });
+                if (!res.ok && res.status !== 206) throw new Error('HTTP ' + res.status);
+
+                const buf = new Uint8Array(await res.arrayBuffer());
+
+                // Total size from Content-Range: "bytes 0-63/29671234"
+                let totalBytes = track.sizeBytes || null;
+                const cr = res.headers.get('Content-Range');
+                if (cr) {
+                    const m = cr.match(/\/(\d+)$/);
+                    if (m) totalBytes = parseInt(m[1], 10);
+                }
+
+                // FLAC magic
+                if (buf.length >= 42 &&
+                    buf[0] === 0x66 && buf[1] === 0x4C && buf[2] === 0x61 && buf[3] === 0x43) {
+
+                    // STREAMINFO begins at byte 8 (4 magic + 4 block header)
+                    const sampleRate = (buf[18] << 12) | (buf[19] << 4) | (buf[20] >> 4);
+                    const channels = ((buf[20] >> 1) & 0x07) + 1;
+                    const bitsPerSample = (((buf[20] & 0x01) << 4) | (buf[21] >> 4)) + 1;
+
+                    // 36-bit total sample count
+                    const totalSamples =
+                        ((buf[21] & 0x0F) * 4294967296) +
+                        (buf[22] * 16777216) + (buf[23] * 65536) + (buf[24] * 256) + buf[25];
+
+                    const duration = sampleRate > 0 ? totalSamples / sampleRate : 0;
+                    const bitrate = (totalBytes && duration > 0)
+                        ? Math.round((totalBytes * 8) / duration / 1000)
+                        : null;
+
+                    return {
+                        format: 'FLAC',
+                        sampleRate: (sampleRate / 1000).toFixed(1) + ' kHz',
+                        bitDepth: bitsPerSample + '-bit',
+                        channels: channels,
+                        bitrate: bitrate ? bitrate + ' kbps' : null,
+                        duration: duration,
+                        measured: true
+                    };
+                }
+
+                // WAV magic: "RIFF"...."WAVE"
+                if (buf.length >= 36 &&
+                    buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46) {
+
+                    const sampleRate = buf[24] | (buf[25] << 8) | (buf[26] << 16) | (buf[27] << 24);
+                    const byteRate   = buf[28] | (buf[29] << 8) | (buf[30] << 16) | (buf[31] << 24);
+                    const channels   = buf[22] | (buf[23] << 8);
+                    const bits       = buf[34] | (buf[35] << 8);
+
+                    return {
+                        format: 'WAV',
+                        sampleRate: (sampleRate / 1000).toFixed(1) + ' kHz',
+                        bitDepth: bits + '-bit',
+                        channels: channels,
+                        bitrate: byteRate ? Math.round(byteRate * 8 / 1000) + ' kbps' : null,
+                        duration: null,
+                        measured: true
+                    };
+                }
+
+                // Unrecognised container — report only what we know
+                return {
+                    format: track.format || 'Unknown',
+                    sampleRate: track.sampleRate,
+                    bitDepth: track.bitDepth,
+                    channels: null,
+                    bitrate: track.bitrate,
+                    duration: null,
+                    measured: false
+                };
+
+            } catch (err) {
+                console.warn('[Aura] header read failed:', err.message);
+                return {
+                    format: track.format || 'Unknown',
+                    sampleRate: track.sampleRate,
+                    bitDepth: track.bitDepth,
+                    channels: null,
+                    bitrate: track.bitrate,
+                    duration: null,
+                    measured: false
+                };
+            }
+        }
+
+        function renderSpecs(meta) {
+            const set = (el, val, measured) => {
+                if (val) {
+                    el.innerText = val;
+                    el.classList.remove('dim');
+                    el.classList.toggle('warn', !measured);
+                    el.title = measured
+                        ? 'Read from the file header'
+                        : 'Not verified — reported by the indexer, not measured';
+                } else {
+                    el.innerText = '—';
+                    el.classList.add('dim');
+                    el.classList.remove('warn');
+                    el.title = 'Could not be determined';
+                }
+            };
+
+            set(specFormat, meta.format + (meta.channels ? ` · ${meta.channels}ch` : ''), meta.measured);
+            set(specRate, (meta.sampleRate && meta.bitDepth) ? `${meta.sampleRate} / ${meta.bitDepth}` : meta.sampleRate, meta.measured);
+            set(specBitrate, meta.bitrate, meta.measured);
+            updateOutputSpec();
+            updatePathSpec();
+        }
+
+        /* ============================================================
+           LIBRARY
+           ============================================================ */
         fetch(PLAYLIST_API)
             .then(res => {
                 if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -1043,9 +1412,7 @@
 
         function buildPlaylistTabs() {
             const folders = new Set();
-            allTracks.forEach(t => {
-                if (t.folder && t.folder !== 'All Tracks') folders.add(t.folder);
-            });
+            allTracks.forEach(t => { if (t.folder && t.folder !== 'All Tracks') folders.add(t.folder); });
 
             playlistList.innerHTML = '';
 
@@ -1105,6 +1472,12 @@
             });
         }
 
+        /* ============================================================
+           PLAYBACK
+           ============================================================ */
+        // Must be set before any src is assigned, or the graph is tainted.
+        audioEl.crossOrigin = 'anonymous';
+
         function playTrack(index) {
             if (index < 0 || index >= visibleTracks.length) return;
             currentIndex = index;
@@ -1123,8 +1496,16 @@
                 albumArtImg.style.display = 'none';
             }
 
+            specFormat.innerText = specRate.innerText = specBitrate.innerText = '…';
+            specFormat.classList.add('dim');
+            specRate.classList.add('dim');
+            specBitrate.classList.add('dim');
+
             audioEl.src = streamUrlFor(track);
             audioEl.load();
+
+            if (!ctx) buildGraph();
+            if (ctx && ctx.state === 'suspended') ctx.resume();
 
             const p = audioEl.play();
             if (p && p.catch) {
@@ -1137,7 +1518,7 @@
                 });
             }
 
-            updateEngineSpecs(track);
+            readRealMetadata(track).then(renderSpecs);
         }
 
         audioEl.onerror = () => {
@@ -1146,46 +1527,18 @@
             dockArtistEl.innerText = 'Playback failed (see console)';
             dockArtistEl.classList.add('error');
             statusLight.className = 'status-indicator failed';
-            specEngine.innerText = 'SOURCE ERROR';
+            specPath.innerText = 'SOURCE ERROR';
             playIcon.className = 'fa-solid fa-play';
         };
-
-        function updateEngineSpecs(track) {
-            if (!track) return;
-            specSampleRate.innerText = `${track.sampleRate || "44.1 kHz"} / ${track.bitDepth || "16-bit"}`;
-
-            if (audioEl.paused) {
-                specEngine.innerText = "OFFLINE";
-                statusLight.className = "status-indicator";
-                return;
-            }
-
-            if (isAudiophileMode) {
-                const isDSD = hqModulator.value.includes("DSD") || hqModulator.value.includes("AMSDM7");
-                if (isDSD) {
-                    specFormat.innerText = `DSD512 (22.5 MHz)`;
-                    specEngine.innerText = "SDM ACTIVE";
-                    statusLight.className = "status-indicator processing";
-                } else {
-                    specFormat.innerText = `PCM 768 kHz / 32-bit`;
-                    specEngine.innerText = "PCM BITPERFECT";
-                    statusLight.className = "status-indicator";
-                }
-            } else {
-                specFormat.innerText = `${track.format || "FLAC"} DIRECT`;
-                specEngine.innerText = "DIRECT PLAY";
-                statusLight.className = "status-indicator processing";
-            }
-        }
-
-        hqFilter.onchange = () => { if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]); };
-        hqModulator.onchange = () => { if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]); };
 
         playPauseBtn.onclick = () => {
             if (!audioEl.src) {
                 if (visibleTracks.length > 0) playTrack(0);
                 return;
             }
+            if (!ctx) buildGraph();
+            if (ctx && ctx.state === 'suspended') ctx.resume();
+
             if (audioEl.paused) {
                 const p = audioEl.play();
                 if (p && p.catch) p.catch(e => console.warn('[Aura]', e.name, e.message));
@@ -1196,9 +1549,8 @@
 
         nextBtn.onclick = () => {
             if (visibleTracks.length === 0) return;
-            if (isShuffle) {
-                playTrack(Math.floor(Math.random() * visibleTracks.length));
-            } else {
+            if (isShuffle) playTrack(Math.floor(Math.random() * visibleTracks.length));
+            else {
                 let n = currentIndex + 1;
                 if (n >= visibleTracks.length) n = 0;
                 playTrack(n);
@@ -1243,9 +1595,7 @@
             }
         };
 
-        audioEl.onloadedmetadata = () => {
-            totalLabel.innerText = formatTime(audioEl.duration);
-        };
+        audioEl.onloadedmetadata = () => { totalLabel.innerText = formatTime(audioEl.duration); };
 
         function updateSeekerPos(clientX) {
             const rect = seekerContainer.getBoundingClientRect();
@@ -1256,10 +1606,7 @@
         }
 
         let isDraggingSeeker = false;
-        seekerContainer.onmousedown = (e) => {
-            isDraggingSeeker = true;
-            updateSeekerPos(e.clientX);
-        };
+        seekerContainer.onmousedown = (e) => { isDraggingSeeker = true; updateSeekerPos(e.clientX); };
 
         seekerContainer.onmousemove = (e) => {
             const rect = seekerContainer.getBoundingClientRect();
@@ -1284,34 +1631,21 @@
         }
 
         let isDraggingVolume = false;
-        volumeSlider.onmousedown = (e) => {
-            isDraggingVolume = true;
-            updateVolume(e.clientX);
-        };
+        volumeSlider.onmousedown = (e) => { isDraggingVolume = true; updateVolume(e.clientX); };
 
         window.addEventListener('mousemove', (e) => {
             if (isDraggingSeeker) updateSeekerPos(e.clientX);
             if (isDraggingVolume) updateVolume(e.clientX);
         });
 
-        window.addEventListener('mouseup', () => {
-            isDraggingSeeker = false;
-            isDraggingVolume = false;
-        });
+        window.addEventListener('mouseup', () => { isDraggingSeeker = false; isDraggingVolume = false; });
 
-        muteBtn.onclick = () => {
-            audioEl.muted = !audioEl.muted;
-            updateMuteIcon();
-        };
+        muteBtn.onclick = () => { audioEl.muted = !audioEl.muted; updateMuteIcon(); };
 
         function updateMuteIcon() {
-            if (audioEl.muted || audioEl.volume === 0) {
-                muteIcon.className = "fa-solid fa-volume-xmark";
-            } else if (audioEl.volume < 0.5) {
-                muteIcon.className = "fa-solid fa-volume-low";
-            } else {
-                muteIcon.className = "fa-solid fa-volume-high";
-            }
+            if (audioEl.muted || audioEl.volume === 0) muteIcon.className = "fa-solid fa-volume-xmark";
+            else if (audioEl.volume < 0.5) muteIcon.className = "fa-solid fa-volume-low";
+            else muteIcon.className = "fa-solid fa-volume-high";
         }
 
         audioEl.volume = 0.8;
@@ -1328,13 +1662,15 @@
             playIcon.className = "fa-solid fa-pause";
             albumArtImg.style.animationPlayState = 'running';
             dockArtistEl.classList.remove('error');
-            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
+            if (ctx && ctx.state === 'suspended') ctx.resume();
+            updatePathSpec();
+            verifyAudible();
         };
 
         audioEl.onpause = () => {
             playIcon.className = "fa-solid fa-play";
             albumArtImg.style.animationPlayState = 'paused';
-            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
+            updatePathSpec();
         };
 
         audioEl.onended = () => {
@@ -1342,6 +1678,9 @@
             albumArtImg.style.animationPlayState = 'paused';
             nextBtn.click();
         };
+
+        sizeCanvas();
+        drawScope();
     </script>
 </body>
 </html>
