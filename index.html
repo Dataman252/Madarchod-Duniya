@@ -886,14 +886,13 @@
         /* ============================================================
            PRESENCE / ONLINE COUNT
 
-           Each tab keeps a short numeric session id in sessionStorage
-           and pings the Apps Script. The script prunes anything it
-           hasn't heard from in 45s and returns the live count.
-
-           No cache-busting parameter is appended: Apps Script does
-           not set aggressive cache headers on this response, and a
-           novel URL on every request was making the failure mode
-           harder to reason about.
+           The heartbeat is sent as /exec?sid=uNNNNNNNNN — no `action`
+           parameter. Requests carrying action=presence were being
+           rejected with a 400 at Google's edge before reaching the
+           script (the Executions log showed every run Completed and
+           no CORS header came back), while the plain /exec route the
+           playlist uses has never failed. So the heartbeat rides that
+           same route and is identified by the sid parameter alone.
            ============================================================ */
         const onlineNum = document.getElementById('online-num');
         const onlineDot = document.getElementById('online-dot');
@@ -918,15 +917,21 @@
         async function sendHeartbeat() {
             if (document.hidden) return;   // a backgrounded tab isn't a listener
 
-            const url = `${PLAYLIST_API}?action=presence&sid=${encodeURIComponent(SESSION_ID)}`;
+            const url = `${PLAYLIST_API}?sid=${encodeURIComponent(SESSION_ID)}`;
 
             try {
                 const res = await fetch(url);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
 
                 const data = await res.json();
-                const n = Number(data.online) || 1;
 
+                // Guard against the playlist array coming back — that would
+                // mean the deployment predates the sid route.
+                if (Array.isArray(data)) {
+                    throw new Error('sid route not deployed (got playlist array)');
+                }
+
+                const n = Number(data.online) || 1;
                 onlineNum.innerText = n;
                 onlineDot.classList.remove('offline');
                 presenceFailures = 0;
@@ -937,8 +942,6 @@
                 presenceFailures++;
                 console.warn(`[Aura] presence unavailable (${presenceFailures}):`, err.message, url);
 
-                // Only surface the dash once it has failed repeatedly, so a
-                // single dropped request doesn't flicker the badge.
                 if (presenceFailures >= 2) {
                     onlineNum.innerText = '–';
                     onlineDot.classList.add('offline');
