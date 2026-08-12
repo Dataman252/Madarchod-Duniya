@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Audiophile Space - HQPlayer Edition</title>
+    <!-- FontAwesome for high quality icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #c084fc;
+            --primary-hover: #a855f7;
+            --secondary: #22d3ee;
+            --bg-glass: rgba(10, 10, 10, 0.25); /* Frosted, lower opacity */
+            --bg-glass-heavy: rgba(12, 12, 12, 0.35); /* Elegant translucent frosted glass */
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-sub: #9ca3af;
+            --text-muted: #6b7280;
+            --glass-blur: blur(20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: url('प्यारे.png') no-repeat center 20% fixed;
+            background-size: cover;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+        }
+
+        /* Ambient dark filter */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -2;
+        }
+
+        /* Sidebar Glass Drawer */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100vh;
+            background: rgba(12, 12, 12, 0.5);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--border-glass);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            box-shadow: 15px 0 35px rgba(0, 0, 0, 0.4);
+        }
+
+        #sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 0.75rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-sidebar-btn:hover {
+            color: #ef4444;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-sub);
+            margin-bottom: 0.75rem;
+            margin-top: 1rem;
+            font-weight: 700;
+        }
+
+        .playlists-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .playlist-tab {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .playlist-tab:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .playlist-tab.active {
+            background: rgba(192, 132, 252, 0.1);
+            border-color: rgba(192, 132, 252, 0.2);
+            color: var(--primary);
+        }
+
+        #library {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 0.25rem;
+        }
+
+        #library::-webkit-scrollbar {
+            width: 4px;
+        }
+        #library::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .track {
+            cursor: pointer;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid transparent;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .track:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .track.active {
+            background: rgba(192, 132, 252, 0.08);
+            border-color: rgba(192, 132, 252, 0.18);
+        }
+
+        .track-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            max-width: 85%;
+        }
+
+        .track-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-artist {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .play-indicator-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: none;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .track.active .play-indicator-dot {
+            display: block;
+        }
+
+        /* Floating Sidebar Toggle Button */
+        .sidebar-trigger {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glass);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 900;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .sidebar-trigger:hover {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--primary);
+        }
+
+        /* Combined Floating Bottom Center Dock */
+        #bottom-container {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 760px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 500;
+        }
+
+        /* Frosted / Highly Translucent Glass Control Panel */
+        #player-dock {
+            background: var(--bg-glass-heavy);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 1.15rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Left Side: Rotating Album Art & Metadata */
+        .player-info-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 220px;
+            flex-shrink: 0;
+        }
+
+        .album-art-wrapper {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            flex-shrink: 0;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .album-art-wrapper i {
+            font-size: 1.25rem;
+            color: var(--text-sub);
+            position: absolute;
+        }
+
+        .album-art-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            animation: rotateDisk 12s linear infinite;
+            animation-play-state: paused;
+            z-index: 2;
+        }
+
+        @keyframes rotateDisk {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .track-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            overflow: hidden;
+        }
+
+        #now-playing-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #now-playing-artist {
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Right Side: Re-designed Beautiful Custom Song Seeker Controls */
+        .audio-controls-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .playback-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .control-btn:hover {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .control-btn.active {
+            color: var(--primary);
+        }
+
+        .control-btn.play-pause {
+            background: var(--primary);
+            color: #000;
+            font-size: 0.95rem;
+            width: 36px;
+            height: 36px;
+        }
+
+        .control-btn.play-pause:hover {
+            background: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        /* Toggle Button for Audiophile Mode */
+        .audiophile-toggle-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .audiophile-toggle-btn.enabled {
+            background: rgba(192, 132, 252, 0.2);
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);
+        }
+
+        /* Premium Customized Custom Slider Seeker */
+        .seeker-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .time-label {
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: var(--text-sub);
+            width: 35px;
+            text-align: center;
+        }
+
+        .seeker-bar-container {
+            flex-grow: 1;
+            position: relative;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .seeker-bar-bg {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            transition: height 0.1s;
+        }
+
+        .seeker-bar-progress {
+            position: absolute;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, #d8b4fe 100%);
+            border-radius: 6px;
+            width: 0%;
+            transition: height 0.1s;
+        }
+
+        .seeker-knob {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            left: 0%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 8px var(--primary);
+            display: none;
+        }
+
+        /* Hover states for seamless, thick controls */
+        .seeker-bar-container:hover .seeker-bar-bg {
+            height: 6px;
+        }
+        .seeker-bar-container:hover .seeker-bar-progress {
+            height: 6px;
+        }
+        .seeker-bar-container:hover .seeker-knob {
+            display: block;
+        }
+
+        /* Time & Percentage Tooltip on Hover */
+        .seeker-tooltip {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 4px;
+            padding: 0.2rem 0.4rem;
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: #fff;
+            pointer-events: none;
+            display: none;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 100;
+        }
+
+        /* Volume Deck Layout */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-left: 0.5rem;
+            position: relative;
+        }
+
+        .volume-bar-container {
+            width: 60px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .volume-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 3px;
+            position: relative;
+            transition: height 0.1s;
+        }
+
+        .volume-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 80%;
+            background: var(--text-main);
+            border-radius: 3px;
+        }
+
+        .volume-bar-container:hover .volume-bar {
+            height: 5px;
+        }
+
+        /* HQPlayer-Style Technical & Settings Panel (Highly Frosted) */
+        #audiophile-specs {
+            background: var(--bg-glass);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 0.75rem 1.25rem;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Spec / Parameter selectors inspired by Signalyst HQPlayer controls */
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .spec-value {
+            font-size: 0.75rem;
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Interactive Selectors for Filters, Dithers & Modulators (HQPlayer specific) */
+        .hq-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--secondary);
+            font-family: monospace;
+            font-size: 0.72rem;
+            border-radius: 4px;
+            padding: 0.15rem 0.35rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            width: 95px;
+        }
+
+        .hq-select:hover {
+            border-color: var(--secondary);
+            background: rgba(34, 211, 238, 0.1);
+        }
+
+        /* Status light styles */
+        .status-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            margin-right: 4px;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .status-indicator.processing {
+            background: var(--primary);
+            box-shadow: 0 0 8px var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-trigger" id="sidebar-toggle" title="Open Library">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Glassmorphic Sidebar Drawer -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h2>Audio Space</h2>
+            <button class="close-sidebar-btn" id="sidebar-close" title="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-section-title">Playlists</div>
+        <div class="playlists-container" id="playlists-list">
+            <div class="playlist-tab active" data-folder="all">
+                <i class="fa-solid fa-music"></i> All Tracks
+            </div>
+        </div>
+
+        <div class="sidebar-section-title">Tracks</div>
+        <div id="library">
+            <!-- Dynamically Rendered -->
+        </div>
+    </div>
+
+    <!-- Floating Integrated Bottom Container -->
+    <div id="bottom-container">
+        <!-- Floating Dock Controls -->
+        <div id="player-dock">
+            <!-- Metadata Area -->
+            <div class="player-info-container">
+                <div class="album-art-wrapper">
+                    <i class="fa-solid fa-compact-disc"></i>
+                    <img id="album-art" class="album-art-image" src="" alt="" style="display:none;">
+                </div>
+                <div class="track-meta">
+                    <span id="now-playing-title">No Track Selected</span>
+                    <span id="now-playing-artist">Open sidebar to play</span>
+                </div>
+            </div>
+
+            <!-- Seeker & Player Controls -->
+            <div class="audio-controls-container">
+                <!-- Row 1: Seeker & Times -->
+                <div class="seeker-row">
+                    <span id="time-current" class="time-label">0:00</span>
+                    <div class="seeker-bar-container" id="seeker-container">
+                        <div class="seeker-bar-bg"></div>
+                        <div class="seeker-bar-progress" id="seeker-progress"></div>
+                        <div class="seeker-knob" id="seeker-knob"></div>
+                        <div class="seeker-tooltip" id="seeker-tooltip">0:00 - 0%</div>
+                    </div>
+                    <span id="time-total" class="time-label">0:00</span>
+                </div>
+
+                <!-- Row 2: Control Action Buttons -->
+                <div class="playback-row">
+                    <button class="control-btn" id="btn-shuffle" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+                    <button class="control-btn" id="btn-prev" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
+                    <button class="control-btn play-pause" id="btn-play-pause" title="Play/Pause"><i class="fa-solid fa-play" id="play-icon"></i></button>
+                    <button class="control-btn" id="btn-next" title="Next"><i class="fa-solid fa-forward-step"></i></button>
+                    
+                    <!-- Volume bar dock -->
+                    <div class="volume-container">
+                        <button class="control-btn" id="btn-mute" style="font-size:0.95rem; width:24px; height:24px;" title="Mute"><i class="fa-solid fa-volume-high" id="mute-icon"></i></button>
+                        <div class="volume-bar-container" id="volume-slider">
+                            <div class="volume-bar">
+                                <div class="volume-progress" id="volume-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audiophile Mode Toggle Button -->
+                    <button class="audiophile-toggle-btn" id="toggle-audiophile" title="Toggle Audiophile Upsampling Pipeline">
+                        <i class="fa-solid fa-microchip"></i> Audiophile Mode
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signalyst HQPlayer-Style Technical & Parameters Panel (Frosted) -->
+        <div id="audiophile-specs" style="display: none;">
+            <!-- SDM / PCM Pipeline Modulators -->
+            <div class="spec-item" id="spec-item-filter">
+                <span class="spec-label">Oversampling Filter</span>
+                <select class="hq-select" id="hq-filter">
+                    <option value="poly-sinc-xtr-lp">poly-sinc-xtr</option>
+                    <option value="poly-sinc-gauss">poly-sinc-gauss</option>
+                    <option value="min-phase">minimum phase</option>
+                    <option value="closed-form">closed-form</option>
+                    <option value="none">no filter</option>
+                </select>
+            </div>
+            
+            <div class="spec-item" id="spec-item-modulator">
+                <span class="spec-label">Modulator / SDM</span>
+                <select class="hq-select" id="hq-modulator">
+                    <option value="AMSDM7">AMSDM7 512fs</option>
+                    <option value="DSD512">DSD512 v2</option>
+                    <option value="NS9">NS9 Dither</option>
+                    <option value="LNS15">LNS15 Noise Shaper</option>
+                </select>
+            </div>
+
+            <div class="spec-item">
+                <span class="spec-label">Resolution / Rate</span>
+                <span id="spec-samplerate" class="spec-value">44.1 kHz / 16-bit</span>
+            </div>
+
+            <div class="spec-item">
+                <span class="spec-label" id="spec-label-format">Output Engine</span>
+                <span id="spec-format" class="spec-value">PCM Bitperfect</span>
+            </div>
+
+            <div class="spec-item">
+                <span class="spec-label">Engine State</span>
+                <span class="spec-value" style="color: #4ade80; display: flex; align-items: center;">
+                    <span class="status-indicator" id="status-light"></span>
+                    <span id="spec-engine">OFFLINE</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden audio element for complete playback engine customization -->
+    <audio id="audio" style="display:none;"></audio>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarClose = document.getElementById('sidebar-close');
+        
+        const libraryEl = document.getElementById('library');
+        const audioEl = document.getElementById('audio');
+        const albumArtImg = document.getElementById('album-art');
+        const dockTitleEl = document.getElementById('now-playing-title');
+        const dockArtistEl = document.getElementById('now-playing-artist');
+        const playlistList = document.getElementById('playlists-list');
+
+        // Custom Seeker Control bindings
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const prevBtn = document.getElementById('btn-prev');
+        const nextBtn = document.getElementById('btn-next');
+        const shuffleBtn = document.getElementById('btn-shuffle');
+        const currentLabel = document.getElementById('time-current');
+        const totalLabel = document.getElementById('time-total');
+        const seekerContainer = document.getElementById('seeker-container');
+        const seekerProgress = document.getElementById('seeker-progress');
+        const seekerKnob = document.getElementById('seeker-knob');
+        const seekerTooltip = document.getElementById('seeker-tooltip');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeProgress = document.getElementById('volume-progress');
+        const muteBtn = document.getElementById('btn-mute');
+        const muteIcon = document.getElementById('mute-icon');
+
+        // Audiophile Mode Toggle Binds
+        const toggleAudiophile = document.getElementById('toggle-audiophile');
+        const specsContainer = document.getElementById('audiophile-specs');
+        const specItemFilter = document.getElementById('spec-item-filter');
+        const specItemModulator = document.getElementById('spec-item-modulator');
+        const specLabelFormat = document.getElementById('spec-label-format');
+
+        // Audiophile Spec Outlets
+        const specFormat = document.getElementById('spec-format');
+        const specSampleRate = document.getElementById('spec-samplerate');
+        const specEngine = document.getElementById('spec-engine');
+        const statusLight = document.getElementById('status-light');
+
+        // Filter / Modulator Dropdowns
+        const hqFilter = document.getElementById('hq-filter');
+        const hqModulator = document.getElementById('hq-modulator');
+
+        let playlistTracks = [];
+        let currentTrackIndex = -1;
+        let isShuffle = false;
+        let isAudiophileMode = false;
+
+        // Open/Close Sidebar
+        sidebarToggle.onclick = () => sidebar.classList.add('open');
+        sidebarClose.onclick = () => sidebar.classList.remove('open');
+
+        // Toggle Audiophile Mode View & Configuration states
+        toggleAudiophile.onclick = () => {
+            isAudiophileMode = !isAudiophileMode;
+            toggleAudiophile.classList.toggle('enabled', isAudiophileMode);
+            
+            if (isAudiophileMode) {
+                // HQPlayer active state
+                specsContainer.style.display = 'grid';
+                specItemFilter.style.display = 'flex';
+                specItemModulator.style.display = 'flex';
+                specLabelFormat.innerText = "Output Engine";
+            } else {
+                // Direct play standard layout
+                specsContainer.style.display = 'grid'; // We still want the metrics bar
+                specItemFilter.style.display = 'none';  // hide parameters
+                specItemModulator.style.display = 'none'; // hide parameters
+                specLabelFormat.innerText = "Playback Direct";
+            }
+            
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+        };
+
+        // Initialize display configuration: default Direct (Non-Audiophile specs bar still visible minus selectors)
+        specsContainer.style.display = 'grid';
+        specItemFilter.style.display = 'none';
+        specItemModulator.style.display = 'none';
+        specLabelFormat.innerText = "Playback Direct";
+
+        // Load metadata
+        fetch('https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec')
+            .then(res => res.json())
+            .then(data => {
+                playlistTracks = data;
+                
+                const foldersSet = new Set();
+                data.forEach(t => {
+                    if (t.folder) foldersSet.add(t.folder);
+                });
+                
+                playlistList.innerHTML = `
+                    <div class="playlist-tab active" data-folder="all">
+                        <i class="fa-solid fa-music"></i> All Tracks
+                    </div>
+                `;
+                
+                foldersSet.forEach(f => {
+                    const tab = document.createElement('div');
+                    tab.className = 'playlist-tab';
+                    tab.setAttribute('data-folder', f);
+                    tab.innerHTML = `<i class="fa-solid fa-folder"></i> ${f}`;
+                    playlistList.appendChild(tab);
+                });
+
+                document.querySelectorAll('.playlist-tab').forEach(tab => {
+                    tab.onclick = () => {
+                        document.querySelectorAll('.playlist-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        renderTracks(tab.getAttribute('data-folder'));
+                    };
+                });
+
+                renderTracks('all');
+            })
+            .catch(err => {
+                console.error("Playlist metadata loading fallback activated:", err);
+                playlistTracks = [
+                    { id: "DEMO_1", title: "Acoustic Breeze", artist: "Benjamin Tissot", folder: "Acoustic", format: "FLAC", sampleRate: "44.1 kHz", bitDepth: "16-bit", bitrate: "844 kbps", cover: "https://www.bensound.com/bensound-img/acousticbreeze.jpg" },
+                    { id: "DEMO_2", title: "Summer Dreams", artist: "Benjamin Tissot", folder: "Electronic", format: "WAV", sampleRate: "96.0 kHz", bitDepth: "24-bit", bitrate: "4608 kbps", cover: "https://www.bensound.com/bensound-img/summer.jpg" },
+                    { id: "DEMO_3", title: "Sci-Fi E.R.F.", artist: "Benjamin Tissot", folder: "Sci-Fi", format: "ALAC", sampleRate: "192.0 kHz", bitDepth: "24-bit", bitrate: "9216 kbps", cover: "https://www.bensound.com/bensound-img/erf.jpg" }
+                ];
+                renderTracks('all');
+            });
+
+        function renderTracks(folderFilter) {
+            libraryEl.innerHTML = '';
+            const filtered = folderFilter === 'all' 
+                ? playlistTracks 
+                : playlistTracks.filter(t => t.folder === folderFilter);
+
+            if (filtered.length === 0) {
+                libraryEl.innerHTML = `<p style="color: var(--text-sub); text-align: center; padding: 1.5rem; font-size: 0.8rem;">No tracks in playlist.</p>`;
+                return;
+            }
+
+            filtered.forEach((t, idx) => {
+                const div = document.createElement('div');
+                div.className = 'track';
+                if (currentTrackIndex === idx) div.classList.add('active');
+
+                div.innerHTML = `
+                    <div class="track-info">
+                        <span class="track-title">${t.title}</span>
+                        <span class="track-artist">${t.artist || 'Unknown Artist'}</span>
+                    </div>
+                    <div class="play-indicator-dot"></div>
+                `;
+
+                div.onclick = () => {
+                    playTrack(playlistTracks.indexOf(t));
+                };
+
+                libraryEl.appendChild(div);
+            });
+        }
+
+        function playTrack(index) {
+            if (index < 0 || index >= playlistTracks.length) return;
+            currentTrackIndex = index;
+            const track = playlistTracks[currentTrackIndex];
+
+            // Update highlighting in list
+            document.querySelectorAll('.track').forEach((el, idx) => {
+                el.classList.toggle('active', playlistTracks.indexOf(track) === idx);
+            });
+
+            audioEl.src = track.streamUrl || `https://docs.google.com/uc?export=download&id=${track.id}`;
+            dockTitleEl.innerText = track.title;
+            dockArtistEl.innerText = track.artist || 'Unknown Artist';
+
+            // Loading Album Cover
+            if (track.cover) {
+                albumArtImg.src = track.cover;
+                albumArtImg.style.display = 'block';
+            } else {
+                albumArtImg.style.display = 'none';
+            }
+
+            updateEngineSpecs(track);
+            audioEl.play();
+        }
+
+        function updateEngineSpecs(track) {
+            if (!track) return;
+            specSampleRate.innerText = `${track.sampleRate || "44.1 kHz"} / ${track.bitDepth || "16-bit"}`;
+            
+            if (audioEl.paused) {
+                specEngine.innerText = "OFFLINE";
+                statusLight.className = "status-indicator";
+                return;
+            }
+
+            if (isAudiophileMode) {
+                // HQPlayer active state upsampling calculations
+                const isDSD = hqModulator.value.includes("DSD") || hqModulator.value.includes("AMSDM7");
+                if (isDSD) {
+                    specFormat.innerText = `DSD512 (22.5 MHz)`;
+                    specEngine.innerText = "SDM ACTIVE";
+                    statusLight.className = "status-indicator processing";
+                } else {
+                    specFormat.innerText = `PCM 768 kHz / 32-bit`;
+                    specEngine.innerText = "PCM BITPERFECT";
+                    statusLight.className = "status-indicator";
+                }
+            } else {
+                // Direct play simple statistics output
+                specFormat.innerText = `${track.format || "FLAC"} DIRECT`;
+                specEngine.innerText = "DIRECT PLAY";
+                statusLight.className = "status-indicator processing";
+            }
+        }
+
+        // Trigger updates when oversampling parameters change (Signalyst HQPlayer behaviors)
+        hqFilter.onchange = () => {
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+        };
+        hqModulator.onchange = () => {
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+        };
+
+        // Play Pause controller trigger
+        playPauseBtn.onclick = () => {
+            if (audioEl.src === '') {
+                if (playlistTracks.length > 0) playTrack(0);
+                return;
+            }
+            if (audioEl.paused) {
+                audioEl.play();
+            } else {
+                audioEl.pause();
+            }
+        };
+
+        // Next / Prev control binds
+        nextBtn.onclick = () => {
+            if (isShuffle) {
+                playTrack(Math.floor(Math.random() * playlistTracks.length));
+            } else {
+                let nextIdx = currentTrackIndex + 1;
+                if (nextIdx >= playlistTracks.length) nextIdx = 0;
+                playTrack(nextIdx);
+            }
+        };
+
+        prevBtn.onclick = () => {
+            let prevIdx = currentTrackIndex - 1;
+            if (prevIdx < 0) prevIdx = playlistTracks.length - 1;
+            playTrack(prevIdx);
+        };
+
+        shuffleBtn.onclick = () => {
+            isShuffle = !isShuffle;
+            shuffleBtn.classList.toggle('active', isShuffle);
+        };
+
+        // Time calculations utility
+        function formatTime(secs) {
+            if (isNaN(secs)) return "0:00";
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // Update customized Seeker track progress dynamically
+        audioEl.ontimeupdate = () => {
+            const current = audioEl.currentTime;
+            const duration = audioEl.duration;
+            if (!isNaN(duration)) {
+                const percentage = (current / duration) * 100;
+                seekerProgress.style.width = `${percentage}%`;
+                seekerKnob.style.left = `${percentage}%`;
+                currentLabel.innerText = formatTime(current);
+                totalLabel.innerText = formatTime(duration);
+            }
+        };
+
+        audioEl.onloadedmetadata = () => {
+            totalLabel.innerText = formatTime(audioEl.duration);
+        };
+
+        // Seamless and Smooth drag & hover timeline seeker
+        function updateSeekerPos(clientX) {
+            const rect = seekerContainer.getBoundingClientRect();
+            const clickX = clientX - rect.left;
+            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+            if (!isNaN(audioEl.duration)) {
+                audioEl.currentTime = percentage * audioEl.duration;
+            }
+        }
+
+        let isDraggingSeeker = false;
+        seekerContainer.onmousedown = (e) => {
+            isDraggingSeeker = true;
+            updateSeekerPos(e.clientX);
+        };
+
+        window.onmousemove = (e) => {
+            if (isDraggingSeeker) {
+                updateSeekerPos(e.clientX);
+            }
+        };
+
+        window.onmouseup = () => {
+            isDraggingSeeker = false;
+        };
+
+        // Hover Time & Percentage Display Calculation
+        seekerContainer.onmousemove = (e) => {
+            const rect = seekerContainer.getBoundingClientRect();
+            const hoverX = e.clientX - rect.left;
+            const percentage = Math.max(0, Math.min(1, hoverX / rect.width));
+            
+            if (!isNaN(audioEl.duration)) {
+                const hoverTime = percentage * audioEl.duration;
+                const pctLabel = Math.round(percentage * 100);
+                
+                seekerTooltip.style.left = `${hoverX}px`;
+                seekerTooltip.innerText = `${formatTime(hoverTime)} - ${pctLabel}%`;
+                seekerTooltip.style.display = 'block';
+            }
+        };
+
+        seekerContainer.onmouseleave = () => {
+            seekerTooltip.style.display = 'none';
+        };
+
+        // Volume slider calculation dynamics
+        function updateVolume(clientX) {
+            const rect = volumeSlider.getBoundingClientRect();
+            const clickX = clientX - rect.left;
+            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+            audioEl.volume = percentage;
+            volumeProgress.style.width = `${percentage * 100}%`;
+            audioEl.muted = false;
+            updateMuteIcon();
+        }
+
+        let isDraggingVolume = false;
+        volumeSlider.onmousedown = (e) => {
+            isDraggingVolume = true;
+            updateVolume(e.clientX);
+        };
+
+        window.addEventListener('mousemove', (e) => {
+            if (isDraggingVolume) {
+                updateVolume(e.clientX);
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDraggingVolume = false;
+        });
+
+        muteBtn.onclick = () => {
+            audioEl.muted = !audioEl.muted;
+            updateMuteIcon();
+        };
+
+        function updateMuteIcon() {
+            if (audioEl.muted || audioEl.volume === 0) {
+                muteIcon.className = "fa-solid fa-volume-xmark";
+            } else if (audioEl.volume < 0.5) {
+                muteIcon.className = "fa-solid fa-volume-low";
+            } else {
+                muteIcon.className = "fa-solid fa-volume-high";
+            }
+        }
+
+        // Sync visual UI elements on playback state modifications
+        audioEl.onplay = () => {
+            playIcon.className = "fa-solid fa-pause";
+            albumArtImg.style.animationPlayState = 'running';
+            document.querySelector('.album-art-wrapper i').style.animation = 'rotateDisk 12s linear infinite';
+            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'running';
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+        };
+
+        audioEl.onpause = () => {
+            playIcon.className = "fa-solid fa-play";
+            albumArtImg.style.animationPlayState = 'paused';
+            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'paused';
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+        };
+
+        audioEl.onended = () => {
+            playIcon.className = "fa-solid fa-play";
+            albumArtImg.style.animationPlayState = 'paused';
+            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'paused';
+            if (currentTrackIndex !== -1) {
+                updateEngineSpecs(playlistTracks[currentTrackIndex]);
+            }
+            nextBtn.click();
+        };
+    </script>
+</body>
+</html>
