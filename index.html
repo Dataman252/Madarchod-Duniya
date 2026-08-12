@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura Audiophile Space - HQPlayer Edition</title>
+    <link rel="icon" href="data:,">
     <!-- FontAwesome for high quality icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,8 +12,8 @@
             --primary: #c084fc;
             --primary-hover: #a855f7;
             --secondary: #22d3ee;
-            --bg-glass: rgba(10, 10, 10, 0.25); /* Frosted, lower opacity */
-            --bg-glass-heavy: rgba(12, 12, 12, 0.35); /* Elegant translucent frosted glass */
+            --bg-glass: rgba(10, 10, 10, 0.25);
+            --bg-glass-heavy: rgba(12, 12, 12, 0.35);
             --border-glass: rgba(255, 255, 255, 0.08);
             --text-main: #f3f4f6;
             --text-sub: #9ca3af;
@@ -37,7 +38,6 @@
             position: relative;
         }
 
-        /* Ambient dark filter */
         body::before {
             content: '';
             position: fixed;
@@ -49,7 +49,6 @@
             z-index: -2;
         }
 
-        /* Sidebar Glass Drawer */
         #sidebar {
             position: fixed;
             top: 0;
@@ -220,7 +219,6 @@
             display: block;
         }
 
-        /* Floating Sidebar Toggle Button */
         .sidebar-trigger {
             position: fixed;
             top: 1.5rem;
@@ -249,7 +247,6 @@
             color: var(--primary);
         }
 
-        /* Combined Floating Bottom Center Dock */
         #bottom-container {
             position: fixed;
             bottom: 2.5rem;
@@ -263,7 +260,6 @@
             z-index: 500;
         }
 
-        /* Frosted / Highly Translucent Glass Control Panel */
         #player-dock {
             background: var(--bg-glass-heavy);
             backdrop-filter: var(--glass-blur);
@@ -278,7 +274,6 @@
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
         }
 
-        /* Left Side: Rotating Album Art & Metadata */
         .player-info-container {
             display: flex;
             align-items: center;
@@ -347,7 +342,8 @@
             text-overflow: ellipsis;
         }
 
-        /* Right Side: Re-designed Beautiful Custom Song Seeker Controls */
+        #now-playing-artist.error { color: #f87171; }
+
         .audio-controls-container {
             flex-grow: 1;
             display: flex;
@@ -399,7 +395,6 @@
             transform: scale(1.05);
         }
 
-        /* Toggle Button for Audiophile Mode */
         .audiophile-toggle-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -422,7 +417,6 @@
             box-shadow: 0 0 10px rgba(192, 132, 252, 0.2);
         }
 
-        /* Premium Customized Custom Slider Seeker */
         .seeker-row {
             display: flex;
             align-items: center;
@@ -457,6 +451,16 @@
             transition: height 0.1s;
         }
 
+        .seeker-bar-buffered {
+            position: absolute;
+            left: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 6px;
+            width: 0%;
+            transition: height 0.1s;
+        }
+
         .seeker-bar-progress {
             position: absolute;
             left: 0;
@@ -479,10 +483,8 @@
             display: none;
         }
 
-        /* Hover states for seamless, thick controls */
-        .seeker-bar-container:hover .seeker-bar-bg {
-            height: 6px;
-        }
+        .seeker-bar-container:hover .seeker-bar-bg,
+        .seeker-bar-container:hover .seeker-bar-buffered,
         .seeker-bar-container:hover .seeker-bar-progress {
             height: 6px;
         }
@@ -490,7 +492,6 @@
             display: block;
         }
 
-        /* Time & Percentage Tooltip on Hover */
         .seeker-tooltip {
             position: absolute;
             bottom: 20px;
@@ -508,7 +509,6 @@
             z-index: 100;
         }
 
-        /* Volume Deck Layout */
         .volume-container {
             display: flex;
             align-items: center;
@@ -548,7 +548,6 @@
             height: 5px;
         }
 
-        /* HQPlayer-Style Technical & Settings Panel (Highly Frosted) */
         #audiophile-specs {
             background: var(--bg-glass);
             backdrop-filter: var(--glass-blur);
@@ -563,7 +562,6 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Spec / Parameter selectors inspired by Signalyst HQPlayer controls */
         .spec-item {
             display: flex;
             flex-direction: column;
@@ -588,7 +586,6 @@
             color: var(--primary);
         }
 
-        /* Interactive Selectors for Filters, Dithers & Modulators (HQPlayer specific) */
         .hq-select {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -609,7 +606,6 @@
             background: rgba(34, 211, 238, 0.1);
         }
 
-        /* Status light styles */
         .status-indicator {
             display: inline-block;
             width: 6px;
@@ -624,16 +620,19 @@
             background: var(--primary);
             box-shadow: 0 0 8px var(--primary);
         }
+
+        .status-indicator.failed {
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Toggle Button -->
     <button class="sidebar-trigger" id="sidebar-toggle" title="Open Library">
         <i class="fa-solid fa-bars"></i>
     </button>
 
-    <!-- Glassmorphic Sidebar Drawer -->
     <div id="sidebar">
         <div class="sidebar-header">
             <h2>Audio Space</h2>
@@ -643,23 +642,14 @@
         </div>
 
         <div class="sidebar-section-title">Playlists</div>
-        <div class="playlists-container" id="playlists-list">
-            <div class="playlist-tab active" data-folder="all">
-                <i class="fa-solid fa-music"></i> All Tracks
-            </div>
-        </div>
+        <div class="playlists-container" id="playlists-list"></div>
 
         <div class="sidebar-section-title">Tracks</div>
-        <div id="library">
-            <!-- Dynamically Rendered -->
-        </div>
+        <div id="library"></div>
     </div>
 
-    <!-- Floating Integrated Bottom Container -->
     <div id="bottom-container">
-        <!-- Floating Dock Controls -->
         <div id="player-dock">
-            <!-- Metadata Area -->
             <div class="player-info-container">
                 <div class="album-art-wrapper">
                     <i class="fa-solid fa-compact-disc"></i>
@@ -671,13 +661,12 @@
                 </div>
             </div>
 
-            <!-- Seeker & Player Controls -->
             <div class="audio-controls-container">
-                <!-- Row 1: Seeker & Times -->
                 <div class="seeker-row">
                     <span id="time-current" class="time-label">0:00</span>
                     <div class="seeker-bar-container" id="seeker-container">
                         <div class="seeker-bar-bg"></div>
+                        <div class="seeker-bar-buffered" id="seeker-buffered"></div>
                         <div class="seeker-bar-progress" id="seeker-progress"></div>
                         <div class="seeker-knob" id="seeker-knob"></div>
                         <div class="seeker-tooltip" id="seeker-tooltip">0:00 - 0%</div>
@@ -685,14 +674,12 @@
                     <span id="time-total" class="time-label">0:00</span>
                 </div>
 
-                <!-- Row 2: Control Action Buttons -->
                 <div class="playback-row">
                     <button class="control-btn" id="btn-shuffle" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
                     <button class="control-btn" id="btn-prev" title="Previous"><i class="fa-solid fa-backward-step"></i></button>
                     <button class="control-btn play-pause" id="btn-play-pause" title="Play/Pause"><i class="fa-solid fa-play" id="play-icon"></i></button>
                     <button class="control-btn" id="btn-next" title="Next"><i class="fa-solid fa-forward-step"></i></button>
-                    
-                    <!-- Volume bar dock -->
+
                     <div class="volume-container">
                         <button class="control-btn" id="btn-mute" style="font-size:0.95rem; width:24px; height:24px;" title="Mute"><i class="fa-solid fa-volume-high" id="mute-icon"></i></button>
                         <div class="volume-bar-container" id="volume-slider">
@@ -702,7 +689,6 @@
                         </div>
                     </div>
 
-                    <!-- Audiophile Mode Toggle Button -->
                     <button class="audiophile-toggle-btn" id="toggle-audiophile" title="Toggle Audiophile Upsampling Pipeline">
                         <i class="fa-solid fa-microchip"></i> Audiophile Mode
                     </button>
@@ -710,9 +696,7 @@
             </div>
         </div>
 
-        <!-- Signalyst HQPlayer-Style Technical & Parameters Panel (Frosted) -->
         <div id="audiophile-specs" style="display: none;">
-            <!-- SDM / PCM Pipeline Modulators -->
             <div class="spec-item" id="spec-item-filter">
                 <span class="spec-label">Oversampling Filter</span>
                 <select class="hq-select" id="hq-filter">
@@ -723,7 +707,7 @@
                     <option value="none">no filter</option>
                 </select>
             </div>
-            
+
             <div class="spec-item" id="spec-item-modulator">
                 <span class="spec-label">Modulator / SDM</span>
                 <select class="hq-select" id="hq-modulator">
@@ -754,14 +738,26 @@
         </div>
     </div>
 
-    <!-- Hidden audio element for complete playback engine customization -->
-    <audio id="audio" style="display:none;"></audio>
+    <audio id="audio" preload="metadata" style="display:none;"></audio>
 
     <script>
+        /* ============================================================
+           CONFIG
+           ============================================================ */
+        const PLAYLIST_API  = 'https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec';
+        const DRIVE_API_KEY = 'AIzaSyCQKib3-SorQYL_eeiaNCpVxE-So6gIn_c';
+
+        // The Drive API endpoint returns raw bytes and honours HTTP Range
+        // requests. The old docs.google.com/uc endpoint returns an HTML
+        // page to media elements, which is what caused MEDIA_ELEMENT_ERROR 4.
+        function streamUrlFor(track) {
+            return `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${DRIVE_API_KEY}`;
+        }
+
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebarClose = document.getElementById('sidebar-close');
-        
+
         const libraryEl = document.getElementById('library');
         const audioEl = document.getElementById('audio');
         const albumArtImg = document.getElementById('album-art');
@@ -769,7 +765,6 @@
         const dockArtistEl = document.getElementById('now-playing-artist');
         const playlistList = document.getElementById('playlists-list');
 
-        // Custom Seeker Control bindings
         const playPauseBtn = document.getElementById('btn-play-pause');
         const playIcon = document.getElementById('play-icon');
         const prevBtn = document.getElementById('btn-prev');
@@ -779,6 +774,7 @@
         const totalLabel = document.getElementById('time-total');
         const seekerContainer = document.getElementById('seeker-container');
         const seekerProgress = document.getElementById('seeker-progress');
+        const seekerBuffered = document.getElementById('seeker-buffered');
         const seekerKnob = document.getElementById('seeker-knob');
         const seekerTooltip = document.getElementById('seeker-tooltip');
         const volumeSlider = document.getElementById('volume-slider');
@@ -786,123 +782,113 @@
         const muteBtn = document.getElementById('btn-mute');
         const muteIcon = document.getElementById('mute-icon');
 
-        // Audiophile Mode Toggle Binds
         const toggleAudiophile = document.getElementById('toggle-audiophile');
         const specsContainer = document.getElementById('audiophile-specs');
         const specItemFilter = document.getElementById('spec-item-filter');
         const specItemModulator = document.getElementById('spec-item-modulator');
         const specLabelFormat = document.getElementById('spec-label-format');
 
-        // Audiophile Spec Outlets
         const specFormat = document.getElementById('spec-format');
         const specSampleRate = document.getElementById('spec-samplerate');
         const specEngine = document.getElementById('spec-engine');
         const statusLight = document.getElementById('status-light');
 
-        // Filter / Modulator Dropdowns
         const hqFilter = document.getElementById('hq-filter');
         const hqModulator = document.getElementById('hq-modulator');
 
-        let playlistTracks = [];
-        let currentTrackIndex = -1;
+        let allTracks = [];      // everything from the feed
+        let visibleTracks = [];  // current filtered view
+        let currentIndex = -1;   // index into visibleTracks
         let isShuffle = false;
         let isAudiophileMode = false;
 
-        // Open/Close Sidebar
         sidebarToggle.onclick = () => sidebar.classList.add('open');
         sidebarClose.onclick = () => sidebar.classList.remove('open');
 
-        // Toggle Audiophile Mode View & Configuration states
+        /* ---------------- Audiophile panel ---------------- */
         toggleAudiophile.onclick = () => {
             isAudiophileMode = !isAudiophileMode;
             toggleAudiophile.classList.toggle('enabled', isAudiophileMode);
-            
-            if (isAudiophileMode) {
-                // HQPlayer active state
-                specsContainer.style.display = 'grid';
-                specItemFilter.style.display = 'flex';
-                specItemModulator.style.display = 'flex';
-                specLabelFormat.innerText = "Output Engine";
-            } else {
-                // Direct play standard layout
-                specsContainer.style.display = 'grid'; // We still want the metrics bar
-                specItemFilter.style.display = 'none';  // hide parameters
-                specItemModulator.style.display = 'none'; // hide parameters
-                specLabelFormat.innerText = "Playback Direct";
-            }
-            
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
+            specsContainer.style.display = 'grid';
+            specItemFilter.style.display = isAudiophileMode ? 'flex' : 'none';
+            specItemModulator.style.display = isAudiophileMode ? 'flex' : 'none';
+            specLabelFormat.innerText = isAudiophileMode ? "Output Engine" : "Playback Direct";
+            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
         };
 
-        // Initialize display configuration: default Direct (Non-Audiophile specs bar still visible minus selectors)
         specsContainer.style.display = 'grid';
         specItemFilter.style.display = 'none';
         specItemModulator.style.display = 'none';
         specLabelFormat.innerText = "Playback Direct";
 
-        // Load metadata
-        fetch('https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec')
-            .then(res => res.json())
+        /* ---------------- Load the library ---------------- */
+        fetch(PLAYLIST_API)
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
             .then(data => {
-                playlistTracks = data;
-                
-                const foldersSet = new Set();
-                data.forEach(t => {
-                    if (t.folder) foldersSet.add(t.folder);
-                });
-                
-                playlistList.innerHTML = `
-                    <div class="playlist-tab active" data-folder="all">
-                        <i class="fa-solid fa-music"></i> All Tracks
-                    </div>
-                `;
-                
-                foldersSet.forEach(f => {
-                    const tab = document.createElement('div');
-                    tab.className = 'playlist-tab';
-                    tab.setAttribute('data-folder', f);
-                    tab.innerHTML = `<i class="fa-solid fa-folder"></i> ${f}`;
-                    playlistList.appendChild(tab);
-                });
-
-                document.querySelectorAll('.playlist-tab').forEach(tab => {
-                    tab.onclick = () => {
-                        document.querySelectorAll('.playlist-tab').forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                        renderTracks(tab.getAttribute('data-folder'));
-                    };
-                });
-
+                if (!Array.isArray(data) || data.length === 0) throw new Error('Feed returned no tracks');
+                allTracks = data;
+                buildPlaylistTabs();
                 renderTracks('all');
             })
             .catch(err => {
-                console.error("Playlist metadata loading fallback activated:", err);
-                playlistTracks = [
-                    { id: "DEMO_1", title: "Acoustic Breeze", artist: "Benjamin Tissot", folder: "Acoustic", format: "FLAC", sampleRate: "44.1 kHz", bitDepth: "16-bit", bitrate: "844 kbps", cover: "https://www.bensound.com/bensound-img/acousticbreeze.jpg" },
-                    { id: "DEMO_2", title: "Summer Dreams", artist: "Benjamin Tissot", folder: "Electronic", format: "WAV", sampleRate: "96.0 kHz", bitDepth: "24-bit", bitrate: "4608 kbps", cover: "https://www.bensound.com/bensound-img/summer.jpg" },
-                    { id: "DEMO_3", title: "Sci-Fi E.R.F.", artist: "Benjamin Tissot", folder: "Sci-Fi", format: "ALAC", sampleRate: "192.0 kHz", bitDepth: "24-bit", bitrate: "9216 kbps", cover: "https://www.bensound.com/bensound-img/erf.jpg" }
-                ];
-                renderTracks('all');
+                console.error("[Aura] Playlist feed failed:", err);
+                libraryEl.innerHTML = `<p style="color:#f87171; text-align:center; padding:1.5rem; font-size:0.8rem;">
+                    Could not load library.<br>${err.message}</p>`;
             });
 
+        function buildPlaylistTabs() {
+            // Collect real folder names, ignoring the synthetic "All Tracks"
+            // label the Apps Script assigns to root-level files, so we don't
+            // end up with two identical tabs.
+            const folders = new Set();
+            allTracks.forEach(t => {
+                if (t.folder && t.folder !== 'All Tracks') folders.add(t.folder);
+            });
+
+            playlistList.innerHTML = '';
+
+            const allTab = document.createElement('div');
+            allTab.className = 'playlist-tab active';
+            allTab.setAttribute('data-folder', 'all');
+            allTab.innerHTML = `<i class="fa-solid fa-music"></i> All Tracks`;
+            playlistList.appendChild(allTab);
+
+            folders.forEach(f => {
+                const tab = document.createElement('div');
+                tab.className = 'playlist-tab';
+                tab.setAttribute('data-folder', f);
+                tab.innerHTML = `<i class="fa-solid fa-folder"></i> ${f}`;
+                playlistList.appendChild(tab);
+            });
+
+            document.querySelectorAll('.playlist-tab').forEach(tab => {
+                tab.onclick = () => {
+                    document.querySelectorAll('.playlist-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    renderTracks(tab.getAttribute('data-folder'));
+                };
+            });
+        }
+
+        /* ---------------- Rendering ---------------- */
         function renderTracks(folderFilter) {
             libraryEl.innerHTML = '';
-            const filtered = folderFilter === 'all' 
-                ? playlistTracks 
-                : playlistTracks.filter(t => t.folder === folderFilter);
+            visibleTracks = (folderFilter === 'all')
+                ? allTracks.slice()
+                : allTracks.filter(t => t.folder === folderFilter);
+            currentIndex = -1;
 
-            if (filtered.length === 0) {
+            if (visibleTracks.length === 0) {
                 libraryEl.innerHTML = `<p style="color: var(--text-sub); text-align: center; padding: 1.5rem; font-size: 0.8rem;">No tracks in playlist.</p>`;
                 return;
             }
 
-            filtered.forEach((t, idx) => {
+            visibleTracks.forEach((t, idx) => {
                 const div = document.createElement('div');
                 div.className = 'track';
-                if (currentTrackIndex === idx) div.classList.add('active');
-
                 div.innerHTML = `
                     <div class="track-info">
                         <span class="track-title">${t.title}</span>
@@ -910,30 +896,29 @@
                     </div>
                     <div class="play-indicator-dot"></div>
                 `;
-
-                div.onclick = () => {
-                    playTrack(playlistTracks.indexOf(t));
-                };
-
+                div.onclick = () => playTrack(idx);
                 libraryEl.appendChild(div);
             });
         }
 
-        function playTrack(index) {
-            if (index < 0 || index >= playlistTracks.length) return;
-            currentTrackIndex = index;
-            const track = playlistTracks[currentTrackIndex];
-
-            // Update highlighting in list
-            document.querySelectorAll('.track').forEach((el, idx) => {
-                el.classList.toggle('active', playlistTracks.indexOf(track) === idx);
+        function highlightActive() {
+            document.querySelectorAll('#library .track').forEach((el, idx) => {
+                el.classList.toggle('active', idx === currentIndex);
             });
+        }
 
-            audioEl.src = track.streamUrl || `https://docs.google.com/uc?export=download&id=${track.id}`;
+        /* ---------------- Playback ---------------- */
+        function playTrack(index) {
+            if (index < 0 || index >= visibleTracks.length) return;
+            currentIndex = index;
+            const track = visibleTracks[currentIndex];
+
+            highlightActive();
+
             dockTitleEl.innerText = track.title;
             dockArtistEl.innerText = track.artist || 'Unknown Artist';
+            dockArtistEl.classList.remove('error');
 
-            // Loading Album Cover
             if (track.cover) {
                 albumArtImg.src = track.cover;
                 albumArtImg.style.display = 'block';
@@ -941,14 +926,39 @@
                 albumArtImg.style.display = 'none';
             }
 
+            // No crossOrigin attribute: not needed, and setting it would
+            // force a preflight the media request doesn't want.
+            audioEl.src = streamUrlFor(track);
+            audioEl.load();
+
+            const p = audioEl.play();
+            if (p && p.catch) {
+                p.catch(err => {
+                    if (err.name === 'NotAllowedError') {
+                        dockArtistEl.innerText = 'Press play to start';
+                    } else {
+                        console.warn('[Aura] play() rejected:', err.name, err.message);
+                    }
+                });
+            }
+
             updateEngineSpecs(track);
-            audioEl.play();
         }
+
+        audioEl.onerror = () => {
+            const e = audioEl.error;
+            console.error('[Aura] AUDIO ERROR', e && e.code, e && e.message, audioEl.currentSrc);
+            dockArtistEl.innerText = 'Playback failed (see console)';
+            dockArtistEl.classList.add('error');
+            statusLight.className = 'status-indicator failed';
+            specEngine.innerText = 'SOURCE ERROR';
+            playIcon.className = 'fa-solid fa-play';
+        };
 
         function updateEngineSpecs(track) {
             if (!track) return;
             specSampleRate.innerText = `${track.sampleRate || "44.1 kHz"} / ${track.bitDepth || "16-bit"}`;
-            
+
             if (audioEl.paused) {
                 specEngine.innerText = "OFFLINE";
                 statusLight.className = "status-indicator";
@@ -956,7 +966,6 @@
             }
 
             if (isAudiophileMode) {
-                // HQPlayer active state upsampling calculations
                 const isDSD = hqModulator.value.includes("DSD") || hqModulator.value.includes("AMSDM7");
                 if (isDSD) {
                     specFormat.innerText = `DSD512 (22.5 MHz)`;
@@ -968,53 +977,44 @@
                     statusLight.className = "status-indicator";
                 }
             } else {
-                // Direct play simple statistics output
                 specFormat.innerText = `${track.format || "FLAC"} DIRECT`;
                 specEngine.innerText = "DIRECT PLAY";
                 statusLight.className = "status-indicator processing";
             }
         }
 
-        // Trigger updates when oversampling parameters change (Signalyst HQPlayer behaviors)
-        hqFilter.onchange = () => {
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
-        };
-        hqModulator.onchange = () => {
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
-        };
+        hqFilter.onchange = () => { if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]); };
+        hqModulator.onchange = () => { if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]); };
 
-        // Play Pause controller trigger
         playPauseBtn.onclick = () => {
-            if (audioEl.src === '') {
-                if (playlistTracks.length > 0) playTrack(0);
+            if (!audioEl.src) {
+                if (visibleTracks.length > 0) playTrack(0);
                 return;
             }
             if (audioEl.paused) {
-                audioEl.play();
+                const p = audioEl.play();
+                if (p && p.catch) p.catch(e => console.warn('[Aura]', e.name, e.message));
             } else {
                 audioEl.pause();
             }
         };
 
-        // Next / Prev control binds
         nextBtn.onclick = () => {
+            if (visibleTracks.length === 0) return;
             if (isShuffle) {
-                playTrack(Math.floor(Math.random() * playlistTracks.length));
+                playTrack(Math.floor(Math.random() * visibleTracks.length));
             } else {
-                let nextIdx = currentTrackIndex + 1;
-                if (nextIdx >= playlistTracks.length) nextIdx = 0;
-                playTrack(nextIdx);
+                let n = currentIndex + 1;
+                if (n >= visibleTracks.length) n = 0;
+                playTrack(n);
             }
         };
 
         prevBtn.onclick = () => {
-            let prevIdx = currentTrackIndex - 1;
-            if (prevIdx < 0) prevIdx = playlistTracks.length - 1;
-            playTrack(prevIdx);
+            if (visibleTracks.length === 0) return;
+            let p = currentIndex - 1;
+            if (p < 0) p = visibleTracks.length - 1;
+            playTrack(p);
         };
 
         shuffleBtn.onclick = () => {
@@ -1022,24 +1022,30 @@
             shuffleBtn.classList.toggle('active', isShuffle);
         };
 
-        // Time calculations utility
         function formatTime(secs) {
-            if (isNaN(secs)) return "0:00";
+            if (isNaN(secs) || !isFinite(secs)) return "0:00";
             const m = Math.floor(secs / 60);
             const s = Math.floor(secs % 60);
             return `${m}:${s.toString().padStart(2, '0')}`;
         }
 
-        // Update customized Seeker track progress dynamically
         audioEl.ontimeupdate = () => {
             const current = audioEl.currentTime;
             const duration = audioEl.duration;
-            if (!isNaN(duration)) {
+            currentLabel.innerText = formatTime(current);
+            if (!isNaN(duration) && isFinite(duration)) {
                 const percentage = (current / duration) * 100;
                 seekerProgress.style.width = `${percentage}%`;
                 seekerKnob.style.left = `${percentage}%`;
-                currentLabel.innerText = formatTime(current);
                 totalLabel.innerText = formatTime(duration);
+            }
+        };
+
+        // Buffered-ahead indicator, useful on big FLAC files
+        audioEl.onprogress = () => {
+            if (audioEl.buffered.length > 0 && isFinite(audioEl.duration)) {
+                const end = audioEl.buffered.end(audioEl.buffered.length - 1);
+                seekerBuffered.style.width = `${(end / audioEl.duration) * 100}%`;
             }
         };
 
@@ -1047,12 +1053,10 @@
             totalLabel.innerText = formatTime(audioEl.duration);
         };
 
-        // Seamless and Smooth drag & hover timeline seeker
         function updateSeekerPos(clientX) {
             const rect = seekerContainer.getBoundingClientRect();
-            const clickX = clientX - rect.left;
-            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
-            if (!isNaN(audioEl.duration)) {
+            const percentage = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+            if (!isNaN(audioEl.duration) && isFinite(audioEl.duration)) {
                 audioEl.currentTime = percentage * audioEl.duration;
             }
         }
@@ -1063,41 +1067,22 @@
             updateSeekerPos(e.clientX);
         };
 
-        window.onmousemove = (e) => {
-            if (isDraggingSeeker) {
-                updateSeekerPos(e.clientX);
-            }
-        };
-
-        window.onmouseup = () => {
-            isDraggingSeeker = false;
-        };
-
-        // Hover Time & Percentage Display Calculation
         seekerContainer.onmousemove = (e) => {
             const rect = seekerContainer.getBoundingClientRect();
             const hoverX = e.clientX - rect.left;
             const percentage = Math.max(0, Math.min(1, hoverX / rect.width));
-            
-            if (!isNaN(audioEl.duration)) {
-                const hoverTime = percentage * audioEl.duration;
-                const pctLabel = Math.round(percentage * 100);
-                
+            if (!isNaN(audioEl.duration) && isFinite(audioEl.duration)) {
                 seekerTooltip.style.left = `${hoverX}px`;
-                seekerTooltip.innerText = `${formatTime(hoverTime)} - ${pctLabel}%`;
+                seekerTooltip.innerText = `${formatTime(percentage * audioEl.duration)} - ${Math.round(percentage * 100)}%`;
                 seekerTooltip.style.display = 'block';
             }
         };
 
-        seekerContainer.onmouseleave = () => {
-            seekerTooltip.style.display = 'none';
-        };
+        seekerContainer.onmouseleave = () => { seekerTooltip.style.display = 'none'; };
 
-        // Volume slider calculation dynamics
         function updateVolume(clientX) {
             const rect = volumeSlider.getBoundingClientRect();
-            const clickX = clientX - rect.left;
-            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+            const percentage = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
             audioEl.volume = percentage;
             volumeProgress.style.width = `${percentage * 100}%`;
             audioEl.muted = false;
@@ -1111,12 +1096,12 @@
         };
 
         window.addEventListener('mousemove', (e) => {
-            if (isDraggingVolume) {
-                updateVolume(e.clientX);
-            }
+            if (isDraggingSeeker) updateSeekerPos(e.clientX);
+            if (isDraggingVolume) updateVolume(e.clientX);
         });
 
         window.addEventListener('mouseup', () => {
+            isDraggingSeeker = false;
             isDraggingVolume = false;
         });
 
@@ -1135,33 +1120,33 @@
             }
         }
 
-        // Sync visual UI elements on playback state modifications
+        audioEl.volume = 0.8;
+        volumeProgress.style.width = '80%';
+
+        // Keyboard: space toggles play, arrows skip 5s
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+            if (e.code === 'Space') { e.preventDefault(); playPauseBtn.click(); }
+            if (e.code === 'ArrowRight' && isFinite(audioEl.duration)) audioEl.currentTime += 5;
+            if (e.code === 'ArrowLeft' && isFinite(audioEl.duration)) audioEl.currentTime -= 5;
+        });
+
         audioEl.onplay = () => {
             playIcon.className = "fa-solid fa-pause";
             albumArtImg.style.animationPlayState = 'running';
-            document.querySelector('.album-art-wrapper i').style.animation = 'rotateDisk 12s linear infinite';
-            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'running';
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
+            dockArtistEl.classList.remove('error');
+            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
         };
 
         audioEl.onpause = () => {
             playIcon.className = "fa-solid fa-play";
             albumArtImg.style.animationPlayState = 'paused';
-            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'paused';
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
+            if (currentIndex !== -1) updateEngineSpecs(visibleTracks[currentIndex]);
         };
 
         audioEl.onended = () => {
             playIcon.className = "fa-solid fa-play";
             albumArtImg.style.animationPlayState = 'paused';
-            document.querySelector('.album-art-wrapper i').style.animationPlayState = 'paused';
-            if (currentTrackIndex !== -1) {
-                updateEngineSpecs(playlistTracks[currentTrackIndex]);
-            }
             nextBtn.click();
         };
     </script>
