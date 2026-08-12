@@ -844,8 +844,8 @@
         const PLAYLIST_API  = 'https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec';
         const DRIVE_API_KEY = 'AIzaSyCQKib3-SorQYL_eeiaNCpVxE-So6gIn_c';
 
-        const USE_24_HOUR      = false;  // flip to true for 24-hour clock
-        const HEARTBEAT_MS     = 25000;  // must stay under the script's 45s TTL
+        const USE_24_HOUR  = false;   // flip to true for a 24-hour clock
+        const HEARTBEAT_MS = 25000;   // must stay under the script's 45s TTL
 
         function streamUrlFor(track) {
             return `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${DRIVE_API_KEY}`;
@@ -886,9 +886,14 @@
         /* ============================================================
            PRESENCE / ONLINE COUNT
 
-           Each tab gets a random session id kept in sessionStorage and
-           pings the Apps Script every 25s. The script prunes anything
-           it hasn't heard from in 45s and returns the live count.
+           Each tab keeps a short numeric session id in sessionStorage
+           and pings the Apps Script. The script prunes anything it
+           hasn't heard from in 45s and returns the live count.
+
+           No cache-busting parameter is appended: Apps Script does
+           not set aggressive cache headers on this response, and a
+           novel URL on every request was making the failure mode
+           harder to reason about.
            ============================================================ */
         const onlineNum = document.getElementById('online-num');
         const onlineDot = document.getElementById('online-dot');
@@ -897,36 +902,47 @@
             let sid;
             try {
                 sid = sessionStorage.getItem('aura_sid');
-                if (!sid) {
-                    sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+                if (!sid || sid.length > 12) {          // discard old long-format ids
+                    sid = 'u' + Math.floor(Math.random() * 1e9);
                     sessionStorage.setItem('aura_sid', sid);
                 }
             } catch (e) {
-                // Private mode or storage blocked — fall back to a per-load id
-                sid = Math.random().toString(36).slice(2);
+                sid = 'u' + Math.floor(Math.random() * 1e9);
             }
             return sid;
         }
 
         const SESSION_ID = getSessionId();
+        let presenceFailures = 0;
 
         async function sendHeartbeat() {
-            // Don't count a backgrounded tab as an active listener
-            if (document.hidden) return;
+            if (document.hidden) return;   // a backgrounded tab isn't a listener
+
+            const url = `${PLAYLIST_API}?action=presence&sid=${encodeURIComponent(SESSION_ID)}`;
 
             try {
-                const res = await fetch(
-                    `${PLAYLIST_API}?action=presence&sid=${encodeURIComponent(SESSION_ID)}&t=${Date.now()}`
-                );
+                const res = await fetch(url);
                 if (!res.ok) throw new Error('HTTP ' + res.status);
+
                 const data = await res.json();
                 const n = Number(data.online) || 1;
+
                 onlineNum.innerText = n;
                 onlineDot.classList.remove('offline');
+                presenceFailures = 0;
+
+                if (data.error) console.warn('[Aura] presence reported:', data.error);
+
             } catch (err) {
-                console.warn('[Aura] presence unavailable:', err.message);
-                onlineNum.innerText = '–';
-                onlineDot.classList.add('offline');
+                presenceFailures++;
+                console.warn(`[Aura] presence unavailable (${presenceFailures}):`, err.message, url);
+
+                // Only surface the dash once it has failed repeatedly, so a
+                // single dropped request doesn't flicker the badge.
+                if (presenceFailures >= 2) {
+                    onlineNum.innerText = '–';
+                    onlineDot.classList.add('offline');
+                }
             }
         }
 
