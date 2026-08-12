@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aura Audiophile Space - HQPlayer Edition</title>
     <link rel="icon" href="data:,">
-    <!-- FontAwesome for high quality icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -21,11 +20,7 @@
             --glass-blur: blur(20px);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -41,14 +36,119 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.3);
             z-index: -2;
         }
 
+        /* ---------- Top-right status cluster ---------- */
+        #status-cluster {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 900;
+            display: flex;
+            align-items: stretch;
+            gap: 0.6rem;
+        }
+
+        .status-card {
+            background: var(--bg-glass-heavy);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #clock-card {
+            padding: 0.6rem 1.1rem;
+            min-width: 148px;
+        }
+
+        #clock-time {
+            font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            line-height: 1.05;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+        }
+
+        #clock-time .seconds {
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-left: 2px;
+        }
+
+        #clock-time .meridiem {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            margin-left: 4px;
+            letter-spacing: 1px;
+        }
+
+        #clock-date {
+            font-size: 0.63rem;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: var(--text-sub);
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+
+        #online-card {
+            padding: 0.6rem 0.9rem;
+            min-width: 74px;
+            cursor: default;
+        }
+
+        #online-count {
+            font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            line-height: 1.1;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .pulse-dot.offline {
+            background: var(--text-muted);
+            box-shadow: none;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.45; transform: scale(0.82); }
+        }
+
+        #online-label {
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            color: var(--text-sub);
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+
+        /* ---------- Sidebar ---------- */
         #sidebar {
             position: fixed;
             top: 0;
@@ -67,9 +167,7 @@
             box-shadow: 15px 0 35px rgba(0, 0, 0, 0.4);
         }
 
-        #sidebar.open {
-            left: 0;
-        }
+        #sidebar.open { left: 0; }
 
         .sidebar-header {
             display: flex;
@@ -83,7 +181,6 @@
         .sidebar-header h2 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--text-main);
             letter-spacing: -0.3px;
         }
 
@@ -96,9 +193,7 @@
             transition: color 0.2s;
         }
 
-        .close-sidebar-btn:hover {
-            color: #ef4444;
-        }
+        .close-sidebar-btn:hover { color: #ef4444; }
 
         .sidebar-section-title {
             font-size: 0.75rem;
@@ -125,7 +220,6 @@
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -152,9 +246,7 @@
             padding-right: 0.25rem;
         }
 
-        #library::-webkit-scrollbar {
-            width: 4px;
-        }
+        #library::-webkit-scrollbar { width: 4px; }
         #library::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
@@ -192,7 +284,6 @@
         .track-title {
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-main);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -215,9 +306,7 @@
             box-shadow: 0 0 8px var(--primary);
         }
 
-        .track.active .play-indicator-dot {
-            display: block;
-        }
+        .track.active .play-indicator-dot { display: block; }
 
         .sidebar-trigger {
             position: fixed;
@@ -247,6 +336,7 @@
             color: var(--primary);
         }
 
+        /* ---------- Bottom dock ---------- */
         #bottom-container {
             position: fixed;
             bottom: 2.5rem;
@@ -315,7 +405,7 @@
 
         @keyframes rotateDisk {
             from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            to   { transform: rotate(360deg); }
         }
 
         .track-meta {
@@ -328,7 +418,6 @@
         #now-playing-title {
             font-size: 0.88rem;
             font-weight: 700;
-            color: var(--text-main);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -378,9 +467,7 @@
             background: rgba(255, 255, 255, 0.04);
         }
 
-        .control-btn.active {
-            color: var(--primary);
-        }
+        .control-btn.active { color: var(--primary); }
 
         .control-btn.play-pause {
             background: var(--primary);
@@ -443,8 +530,7 @@
 
         .seeker-bar-bg {
             position: absolute;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             height: 4px;
             background: rgba(255, 255, 255, 0.12);
             border-radius: 6px;
@@ -485,12 +571,8 @@
 
         .seeker-bar-container:hover .seeker-bar-bg,
         .seeker-bar-container:hover .seeker-bar-buffered,
-        .seeker-bar-container:hover .seeker-bar-progress {
-            height: 6px;
-        }
-        .seeker-bar-container:hover .seeker-knob {
-            display: block;
-        }
+        .seeker-bar-container:hover .seeker-bar-progress { height: 6px; }
+        .seeker-bar-container:hover .seeker-knob { display: block; }
 
         .seeker-tooltip {
             position: absolute;
@@ -536,17 +618,14 @@
 
         .volume-progress {
             position: absolute;
-            left: 0;
-            top: 0;
+            left: 0; top: 0;
             height: 100%;
             width: 80%;
             background: var(--text-main);
             border-radius: 3px;
         }
 
-        .volume-bar-container:hover .volume-bar {
-            height: 5px;
-        }
+        .volume-bar-container:hover .volume-bar { height: 5px; }
 
         #audiophile-specs {
             background: var(--bg-glass);
@@ -625,6 +704,12 @@
             background: #ef4444;
             box-shadow: 0 0 8px #ef4444;
         }
+
+        @media (max-width: 640px) {
+            #clock-card { min-width: 0; padding: 0.5rem 0.8rem; }
+            #clock-time { font-size: 1.15rem; }
+            #clock-date { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -632,6 +717,18 @@
     <button class="sidebar-trigger" id="sidebar-toggle" title="Open Library">
         <i class="fa-solid fa-bars"></i>
     </button>
+
+    <!-- Clock + presence -->
+    <div id="status-cluster">
+        <div class="status-card" id="online-card" title="Listeners currently on this page">
+            <div id="online-count"><span class="pulse-dot offline" id="online-dot"></span><span id="online-num">–</span></div>
+            <div id="online-label">Online</div>
+        </div>
+        <div class="status-card" id="clock-card">
+            <div id="clock-time">--:--</div>
+            <div id="clock-date">&nbsp;</div>
+        </div>
+    </div>
 
     <div id="sidebar">
         <div class="sidebar-header">
@@ -747,13 +844,101 @@
         const PLAYLIST_API  = 'https://script.google.com/macros/s/AKfycbyO05GfIiGJlgKEhZwtK9mIxD0Ox5dvXS_H7wMAH8nZWGPPWmzsZSON7w0lGK_i6CTK/exec';
         const DRIVE_API_KEY = 'AIzaSyCQKib3-SorQYL_eeiaNCpVxE-So6gIn_c';
 
-        // The Drive API endpoint returns raw bytes and honours HTTP Range
-        // requests. The old docs.google.com/uc endpoint returns an HTML
-        // page to media elements, which is what caused MEDIA_ELEMENT_ERROR 4.
+        const USE_24_HOUR      = false;  // flip to true for 24-hour clock
+        const HEARTBEAT_MS     = 25000;  // must stay under the script's 45s TTL
+
         function streamUrlFor(track) {
             return `https://www.googleapis.com/drive/v3/files/${track.id}?alt=media&key=${DRIVE_API_KEY}`;
         }
 
+        /* ============================================================
+           DIGITAL CLOCK
+           ============================================================ */
+        const clockTime = document.getElementById('clock-time');
+        const clockDate = document.getElementById('clock-date');
+
+        function tickClock() {
+            const now = new Date();
+            let h = now.getHours();
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            let meridiem = '';
+
+            if (!USE_24_HOUR) {
+                meridiem = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+            }
+
+            const hh = USE_24_HOUR ? String(h).padStart(2, '0') : String(h);
+
+            clockTime.innerHTML =
+                `${hh}:${m}<span class="seconds">${s}</span>` +
+                (meridiem ? `<span class="meridiem">${meridiem}</span>` : '');
+
+            clockDate.innerText = now.toLocaleDateString(undefined, {
+                weekday: 'short', day: 'numeric', month: 'short'
+            });
+        }
+
+        tickClock();
+        setInterval(tickClock, 1000);
+
+        /* ============================================================
+           PRESENCE / ONLINE COUNT
+
+           Each tab gets a random session id kept in sessionStorage and
+           pings the Apps Script every 25s. The script prunes anything
+           it hasn't heard from in 45s and returns the live count.
+           ============================================================ */
+        const onlineNum = document.getElementById('online-num');
+        const onlineDot = document.getElementById('online-dot');
+
+        function getSessionId() {
+            let sid;
+            try {
+                sid = sessionStorage.getItem('aura_sid');
+                if (!sid) {
+                    sid = Math.random().toString(36).slice(2) + Date.now().toString(36);
+                    sessionStorage.setItem('aura_sid', sid);
+                }
+            } catch (e) {
+                // Private mode or storage blocked — fall back to a per-load id
+                sid = Math.random().toString(36).slice(2);
+            }
+            return sid;
+        }
+
+        const SESSION_ID = getSessionId();
+
+        async function sendHeartbeat() {
+            // Don't count a backgrounded tab as an active listener
+            if (document.hidden) return;
+
+            try {
+                const res = await fetch(
+                    `${PLAYLIST_API}?action=presence&sid=${encodeURIComponent(SESSION_ID)}&t=${Date.now()}`
+                );
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                const n = Number(data.online) || 1;
+                onlineNum.innerText = n;
+                onlineDot.classList.remove('offline');
+            } catch (err) {
+                console.warn('[Aura] presence unavailable:', err.message);
+                onlineNum.innerText = '–';
+                onlineDot.classList.add('offline');
+            }
+        }
+
+        sendHeartbeat();
+        setInterval(sendHeartbeat, HEARTBEAT_MS);
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) sendHeartbeat();
+        });
+
+        /* ============================================================
+           PLAYER
+           ============================================================ */
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebarClose = document.getElementById('sidebar-close');
@@ -796,16 +981,15 @@
         const hqFilter = document.getElementById('hq-filter');
         const hqModulator = document.getElementById('hq-modulator');
 
-        let allTracks = [];      // everything from the feed
-        let visibleTracks = [];  // current filtered view
-        let currentIndex = -1;   // index into visibleTracks
+        let allTracks = [];
+        let visibleTracks = [];
+        let currentIndex = -1;
         let isShuffle = false;
         let isAudiophileMode = false;
 
         sidebarToggle.onclick = () => sidebar.classList.add('open');
         sidebarClose.onclick = () => sidebar.classList.remove('open');
 
-        /* ---------------- Audiophile panel ---------------- */
         toggleAudiophile.onclick = () => {
             isAudiophileMode = !isAudiophileMode;
             toggleAudiophile.classList.toggle('enabled', isAudiophileMode);
@@ -821,7 +1005,6 @@
         specItemModulator.style.display = 'none';
         specLabelFormat.innerText = "Playback Direct";
 
-        /* ---------------- Load the library ---------------- */
         fetch(PLAYLIST_API)
             .then(res => {
                 if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -840,9 +1023,6 @@
             });
 
         function buildPlaylistTabs() {
-            // Collect real folder names, ignoring the synthetic "All Tracks"
-            // label the Apps Script assigns to root-level files, so we don't
-            // end up with two identical tabs.
             const folders = new Set();
             allTracks.forEach(t => {
                 if (t.folder && t.folder !== 'All Tracks') folders.add(t.folder);
@@ -873,7 +1053,6 @@
             });
         }
 
-        /* ---------------- Rendering ---------------- */
         function renderTracks(folderFilter) {
             libraryEl.innerHTML = '';
             visibleTracks = (folderFilter === 'all')
@@ -907,7 +1086,6 @@
             });
         }
 
-        /* ---------------- Playback ---------------- */
         function playTrack(index) {
             if (index < 0 || index >= visibleTracks.length) return;
             currentIndex = index;
@@ -926,8 +1104,6 @@
                 albumArtImg.style.display = 'none';
             }
 
-            // No crossOrigin attribute: not needed, and setting it would
-            // force a preflight the media request doesn't want.
             audioEl.src = streamUrlFor(track);
             audioEl.load();
 
@@ -1041,7 +1217,6 @@
             }
         };
 
-        // Buffered-ahead indicator, useful on big FLAC files
         audioEl.onprogress = () => {
             if (audioEl.buffered.length > 0 && isFinite(audioEl.duration)) {
                 const end = audioEl.buffered.end(audioEl.buffered.length - 1);
@@ -1123,12 +1298,11 @@
         audioEl.volume = 0.8;
         volumeProgress.style.width = '80%';
 
-        // Keyboard: space toggles play, arrows skip 5s
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
             if (e.code === 'Space') { e.preventDefault(); playPauseBtn.click(); }
             if (e.code === 'ArrowRight' && isFinite(audioEl.duration)) audioEl.currentTime += 5;
-            if (e.code === 'ArrowLeft' && isFinite(audioEl.duration)) audioEl.currentTime -= 5;
+            if (e.code === 'ArrowLeft'  && isFinite(audioEl.duration)) audioEl.currentTime -= 5;
         });
 
         audioEl.onplay = () => {
