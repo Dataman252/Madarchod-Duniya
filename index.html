@@ -35,15 +35,22 @@
 .lrow .val{font:.63rem/1 ui-monospace,monospace;color:var(--secondary);width:56px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;cursor:pointer;border-bottom:1px dashed transparent}
 .lrow .val:hover{border-bottom-color:var(--line-hi)}
 #eq-cv{width:100%;height:144px;display:block;border-radius:11px;background:rgba(0,0,0,.26);touch-action:none;cursor:crosshair}
-#eq-bands{display:grid;grid-template-columns:repeat(10,1fr);gap:.28rem;margin-top:.55rem}
-.bd{display:flex;flex-direction:column;align-items:center;gap:.22rem}
+#eq-bands{display:grid;grid-template-columns:repeat(10,1fr);gap:.2rem;margin-top:.7rem}
+.bd{display:flex;flex-direction:column;align-items:center;gap:.28rem}
 .bd .g{font:.57rem/1 ui-monospace,monospace;color:var(--secondary);font-variant-numeric:tabular-nums}
 .bd .f{font:.54rem/1 ui-monospace,monospace;color:var(--tx3)}
-.vs{-webkit-appearance:none;appearance:none;width:18px;height:96px;background:transparent;cursor:pointer;writing-mode:vertical-lr;direction:rtl}
-.vs::-webkit-slider-runnable-track{width:3px;border-radius:3px;background:rgba(255,255,255,.16)}
-.vs::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--primary);box-shadow:0 0 6px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.55);margin-left:-5.5px}
-.vs::-moz-range-track{width:3px;border-radius:3px;background:rgba(255,255,255,.16)}
-.vs::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:var(--primary)}
+/* A rotated horizontal slider — vertical writing-mode on range inputs
+   isn't reliably supported and collapsed to nothing. */
+.vwrap{height:104px;width:24px;display:flex;align-items:center;justify-content:center;position:relative}
+.vs{
+  -webkit-appearance:none;appearance:none;
+  width:104px;height:22px;background:transparent;cursor:pointer;
+  transform:rotate(-90deg);transform-origin:center;position:absolute;flex:none
+}
+.vs::-webkit-slider-runnable-track{height:4px;border-radius:3px;background:rgba(255,255,255,.18)}
+.vs::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;margin-top:-5.5px;border-radius:50%;background:var(--primary);box-shadow:0 0 7px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.6)}
+.vs::-moz-range-track{height:4px;border-radius:3px;background:rgba(255,255,255,.18)}
+.vs::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;background:var(--primary)}
 .bq{width:100%;display:none}
 #eq-bands.showq .bq{display:block}
 #viz-cv{width:100%;height:150px;display:block;border-radius:11px;background:rgba(0,0,0,.3)}
@@ -75,7 +82,12 @@
 #d-lat{font:.62rem/1 ui-monospace,monospace;color:var(--tx3);padding:0 .3rem}
 @media (max-width:980px){#d-inner{grid-template-columns:1fr}}
 @media (max-width:760px){
-  #d-panel{padding:calc(4.2rem + var(--st)) .6rem calc(12rem + var(--sb))}
+  /* The chrome row and the DSP header were landing on top of each other */
+  body.dsp-open #chrome{display:none}
+  #d-top{top:calc(.6rem + var(--st))}
+  #d-bar{gap:.35rem;padding:.45rem .5rem}
+  #d-bar .btn{padding:.42rem .55rem;font-size:.7rem}
+  #d-panel{padding:calc(7.4rem + var(--st)) .6rem calc(13rem + var(--sb))}
   #eq-bands{grid-template-columns:repeat(5,1fr);gap:.45rem;row-gap:.7rem}
   #eq-cv{height:118px}
   #d-lat{display:none}
