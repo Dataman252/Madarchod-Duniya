@@ -541,6 +541,7 @@ $('btn-dsp').onclick = () => {
   const on = $('d-panel').classList.toggle('on');
   $('d-top').classList.toggle('on', on);
   $('btn-dsp').classList.toggle('on', on);
+  document.body.classList.toggle('dsp-open', on);
   if (on) { requestAnimationFrame(() => { fitCanvas($('eq-cv')); fitCanvas($('viz-cv')); DSP.drawCurve(); }); }
 };
 $('d-close').onclick = () => $('btn-dsp').onclick();
@@ -624,7 +625,7 @@ function buildBands() {
     d.className = 'bd';
     d.innerHTML =
       `<span class="g" id="bg${i}">${b.g>0?'+':''}${b.g.toFixed(1)}</span>` +
-      `<input class="vs" type="range" id="bs${i}" min="-12" max="12" step="0.5" value="${b.g}" orient="vertical">` +
+      `<div class="vwrap"><input class="vs" type="range" id="bs${i}" min="-12" max="12" step="0.5" value="${b.g}"></div>` +
       `<span class="f">${b.f>=1000?(b.f/1000)+'k':b.f}</span>` +
       `<input class="bq" type="range" id="bq${i}" min="0.3" max="6" step="0.1" value="${b.q}">`;
     host.appendChild(d);
