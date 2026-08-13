@@ -468,33 +468,44 @@ const Ambient = {
     const G = cs.getPropertyValue('--accent-g').trim() || 132;
     const B = cs.getPropertyValue('--accent-b').trim() || 252;
     const mid = h * 0.62;
-    const amp = h * 0.34;
+    const amp = h * 0.42;
 
     for (let pass = 0; pass < 2; pass++) {
-      const dir = pass ? -1 : 1;
-      this.cx.beginPath();
-      this.cx.moveTo(0, mid);
-      for (let i = 0; i < N; i++) {
-        const x = (i/(N-1)) * w;
-        const y = mid - dir * this.smooth[i] * amp;
-        if (i === 0) this.cx.lineTo(x, y);
-        else {
-          const px = ((i-1)/(N-1)) * w;
-          const py = mid - dir * this.smooth[i-1] * amp;
-          this.cx.bezierCurveTo(px + (x-px)/2, py, px + (x-px)/2, y, x, y);
+      const dir = pass ? -1 : 1;      // pass 1 is the mirrored reflection
+      const trace = () => {
+        this.cx.beginPath();
+        this.cx.moveTo(0, mid);
+        for (let i = 0; i < N; i++) {
+          const x = (i/(N-1)) * w;
+          const y = mid - dir * this.smooth[i] * amp;
+          if (i === 0) this.cx.lineTo(x, y);
+          else {
+            const px = ((i-1)/(N-1)) * w;
+            const py = mid - dir * this.smooth[i-1] * amp;
+            this.cx.bezierCurveTo(px + (x-px)/2, py, px + (x-px)/2, y, x, y);
+          }
         }
-      }
-      this.cx.lineTo(w, mid);
-      this.cx.strokeStyle = `rgba(${R},${G},${B},${pass ? .16 : .26})`;
-      this.cx.lineWidth = pass ? 1 : 1.6;
-      this.cx.stroke();
+        this.cx.lineTo(w, mid);
+      };
 
+      // Fill first, then stroke over it, so the line stays crisp
+      trace();
       this.cx.lineTo(w, mid); this.cx.lineTo(0, mid); this.cx.closePath();
       const g = this.cx.createLinearGradient(0, mid - dir*amp, 0, mid);
-      g.addColorStop(0, `rgba(${R},${G},${B},${pass ? .015 : .05})`);
-      g.addColorStop(1, `rgba(34,211,238,0)`);
+      g.addColorStop(0, `rgba(${R},${G},${B},${pass ? .10 : .26})`);
+      g.addColorStop(1, 'rgba(34,211,238,0)');
       this.cx.fillStyle = g;
       this.cx.fill();
+
+      trace();
+      this.cx.save();
+      this.cx.shadowColor = `rgba(${R},${G},${B},${pass ? .35 : .7})`;
+      this.cx.shadowBlur = pass ? 6 : 14;
+      this.cx.strokeStyle = `rgba(${R},${G},${B},${pass ? .5 : .88})`;
+      this.cx.lineWidth = pass ? 1.3 : 2.1;
+      this.cx.lineJoin = 'round';
+      this.cx.stroke();
+      this.cx.restore();
     }
   }
 };
