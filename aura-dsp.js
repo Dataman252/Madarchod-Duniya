@@ -500,8 +500,12 @@ DSP.drawViz = function () {
   else if (this.view === 'gram') {
     if (!this.gramReady) { x.fillStyle = '#07070a'; x.fillRect(0,0,w,h); this.gramReady = true; }
     const d = new Uint8Array(bins); an.getByteFrequencyData(d);
-    x.putImageData(x.getImageData(2,0,w-2,h), 0, 0);
-    x.clearRect(w-2,0,2,h);
+    // Scroll with drawImage rather than getImageData: pixel data ignores
+    // the DPR transform, which made the whole gram pile up on one edge.
+    x.save();
+    x.globalCompositeOperation = 'copy';
+    x.drawImage(c, -2, 0, w, h);
+    x.restore();
     for (let y=0;y<h;y++) {
       const f = F0*Math.pow(F1/F0, 1-(y/h));
       const b = Math.min(bins-1, Math.floor(f/nyq*bins));
