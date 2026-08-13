@@ -41,8 +41,9 @@ async function onSignedIn() {
     loadFolder('all');
     renderQueue();
     updateSync();
-    hydrateMeta(() => renderQueue());
+    hydrateMeta(() => { renderQueue(); updateSpecs(); });
     maybeInfo();
+    updateSpecs();
     refreshBadge();
   } catch (e) {
     $('lib').innerHTML = `<div class="empty" style="color:#f87171">Could not load library.<br>${esc(e.message)}</div>`;
@@ -1084,3 +1085,73 @@ document.addEventListener('visibilitychange', () => {
 document.addEventListener('keydown', e => {
   if (e.code === 'Escape') document.querySelectorAll('.ov.on').forEach(o => o.classList.remove('on'));
 });
+
+/* ============================================================
+   TRACK INFO STRIP
+
+   Everything here is measured from the file itself — read out of
+   the FLAC header, not guessed. A value shows amber if it came
+   from the indexer rather than the header.
+   ============================================================ */
+function updateSpecs() {
+  const t = AURA.queue.find(x => x.id === AURA.currentId);
+  const set = (id, v, measured) => {
+    const el = $(id);
+    if (v) {
+      el.textContent = v;
+      el.classList.remove('dim');
+      el.classList.toggle('warn', measured === false);
+      el.title = measured === false ? 'Reported by the indexer, not measured'
+        : 'Read from the file header';
+    } else {
+      el.textContent = '—';
+      el.classList.add('dim');
+      el.classList.remove('warn');
+      el.title = '';
+    }
+  };
+
+  if (!t) { ['sp-fmt','sp-rate','sp-br','sp-size'].forEach(id => set(id, null)); updateState(); return; }
+
+  const m = AURA.meta.get(t.id) || {};
+  set('sp-fmt', (m.format || t.format || '') + (m.channels ? ` ${m.channels}ch` : ''), m.measured);
+  set('sp-rate', m.sampleRate ? `${(m.sampleRate/1000).toFixed(1)}k` + (m.bits ? ` / ${m.bits}bit` : '') : null, m.measured);
+  set('sp-br', m.bitrate ? m.bitrate + ' kbps' : null, m.measured);
+  set('sp-size', fmtBytes(t.sizeBytes), true);
+  updateState();
+}
+
+function updateState() {
+  const el = $('sp-state'), dot = $('sp-dot');
+  if (!el) return;
+  const loading = $('load').classList.contains('on');
+  const err = $('np-a').classList.contains('err');
+  let label, cls;
+
+  if (err)              { label = 'Error';   cls = 'bad'; }
+  else if (loading)     { label = 'Loading'; cls = 'load'; }
+  else if (!AURA.audio.src)      { label = 'Idle'; cls = ''; }
+  else if (AURA.audio.paused)    { label = DB.has(AURA.currentId) ? 'Cached' : 'Paused'; cls = ''; }
+  else if (DSP.on && !DSP.bypass){ label = 'DSP';    cls = 'play'; }
+  else                  { label = 'Direct'; cls = 'play'; }
+
+  el.innerHTML = `<span class="sp-dot ${cls}" id="sp-dot"></span>${label}`;
+  el.classList.remove('dim');
+}
+
+/* Hook the strip into the events that change it */
+const _origTrackChange = AURA.onTrackChange;
+AURA.onTrackChange = (track, url) => {
+  if (_origTrackChange) _origTrackChange(track, url);
+  updateSpecs();
+};
+const _origPlayState = onPlayState;
+onPlayState = function () { if (_origPlayState) _origPlayState(); updateState(); };
+
+const _origHideLoad = Player.hideLoad.bind(Player);
+Player.hideLoad = function () { _origHideLoad(); updateSpecs(); };
+const _origShowLoad = Player.showLoad.bind(Player);
+Player.showLoad = function (t) { _origShowLoad(t); updateState(); };
+
+const _origApply = DSP.apply.bind(DSP);
+DSP.apply = function () { _origApply(); updateState(); };
