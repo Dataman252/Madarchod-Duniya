@@ -1051,3 +1051,95 @@ async function hydrateMeta(onEach) {
   };
   await Promise.all([worker(), worker()]);
 }
+
+/* ============================================================
+   FLOATING PARTICLES
+
+   Slow drifting motes that rise and pulse with bass energy. They
+   drift on their own even with no audio attached, so the page
+   never looks dead.
+   ============================================================ */
+const Dust = {
+  cv: null, cx: null, on: true, parts: [], analyser: null, energy: 0,
+
+  init() {
+    this.cv = $('dust');
+    if (!this.cv) return;
+    this.cx = this.cv.getContext('2d');
+    this.on = lsGet('aura_dust', true);
+    this.cv.classList.toggle('off', !this.on);
+    this.size();
+    addEventListener('resize', () => this.size());
+    this.loop();
+  },
+  size() {
+    if (!this.cv) return;
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    this.cv.width = Math.floor(innerWidth * dpr);
+    this.cv.height = Math.floor(innerHeight * dpr);
+    this.cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.seed();
+  },
+  seed() {
+    const n = innerWidth < 700 ? 34 : 64;
+    this.parts = Array.from({ length: n }, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight,
+      r: 0.6 + Math.random() * 1.9,
+      vy: -(0.06 + Math.random() * 0.26),
+      vx: (Math.random() - 0.5) * 0.13,
+      a: 0.12 + Math.random() * 0.4,
+      ph: Math.random() * Math.PI * 2
+    }));
+  },
+  attach(an) { this.analyser = an; },
+  toggle() {
+    this.on = !this.on;
+    lsSet('aura_dust', this.on);
+    this.cv.classList.toggle('off', !this.on);
+    if (!this.on) this.cx.clearRect(0, 0, innerWidth, innerHeight);
+    return this.on;
+  },
+
+  loop() {
+    requestAnimationFrame(() => this.loop());
+    if (!this.on || !this.cx) return;
+
+    // bass energy drives how lively the motes are
+    if (this.analyser) {
+      const b = new Uint8Array(24);
+      this.analyser.getByteFrequencyData(b);
+      let s = 0;
+      for (let i = 0; i < 24; i++) s += b[i];
+      this.energy += ((s / 24 / 255) - this.energy) * 0.08;
+    } else this.energy += (0.1 - this.energy) * 0.02;
+
+    const cs = getComputedStyle(document.documentElement);
+    const R = cs.getPropertyValue('--accent-r').trim() || 192;
+    const G = cs.getPropertyValue('--accent-g').trim() || 132;
+    const B = cs.getPropertyValue('--accent-b').trim() || 252;
+
+    const w = innerWidth, h = innerHeight;
+    this.cx.clearRect(0, 0, w, h);
+    const boost = 1 + this.energy * 2.4;
+    const t = performance.now() / 1000;
+
+    this.parts.forEach(p => {
+      p.y += p.vy * boost;
+      p.x += p.vx * boost + Math.sin(t * 0.35 + p.ph) * 0.14;
+      if (p.y < -8) { p.y = h + 8; p.x = Math.random() * w; }
+      if (p.x < -8) p.x = w + 8;
+      if (p.x > w + 8) p.x = -8;
+
+      const tw = 0.65 + 0.35 * Math.sin(t * 1.1 + p.ph);
+      const rad = p.r * (1 + this.energy * 0.7);
+      const g = this.cx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad * 4);
+      g.addColorStop(0, `rgba(${R},${G},${B},${p.a * tw})`);
+      g.addColorStop(1, `rgba(${R},${G},${B},0)`);
+      this.cx.fillStyle = g;
+      this.cx.beginPath();
+      this.cx.arc(p.x, p.y, rad * 4, 0, Math.PI * 2);
+      this.cx.fill();
+    });
+  }
+};
