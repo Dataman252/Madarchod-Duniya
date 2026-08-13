@@ -75,6 +75,11 @@ body::before{
 .ch h2{font-size:.64rem;text-transform:uppercase;letter-spacing:1.3px;color:var(--tx3);font-weight:700;display:flex;align-items:center;gap:.4rem}
 .ch h2 i{color:var(--primary);font-size:.7rem}
 .ch .r{display:flex;align-items:center;gap:.35rem}
+.rst{background:none;border:1px solid rgba(255,255,255,.1);color:var(--tx3);width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.62rem;transition:all .16s;flex-shrink:0}
+.rst:hover{color:var(--warn);border-color:rgba(251,191,36,.4)}
+.rst:active{transform:scale(.9)}
+#btn-reset-all{border-color:rgba(239,68,68,.28);color:#f87171}
+#btn-reset-all:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.5)}
 
 /* ---------- Controls ---------- */
 .sw{position:relative;width:42px;height:23px;border-radius:23px;flex-shrink:0;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);cursor:pointer;padding:0;transition:background .2s,border-color .2s}
@@ -247,6 +252,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
     <button class="tbtn" id="btn-bg" title="Keeps playing when the screen locks"><i class="fa-solid fa-moon"></i> <span>Background</span></button>
     <button class="tbtn" id="btn-dsp" title="Route audio through the processing chain"><i class="fa-solid fa-power-off"></i> <span>DSP Off</span></button>
     <button class="tbtn" id="btn-ab" title="Hold to hear it flat">A/B</button>
+    <button class="tbtn" id="btn-reset-all" title="Put every control back to default"><i class="fa-solid fa-rotate-left"></i> Reset all</button>
     <a class="tbtn" href="index.html"><i class="fa-solid fa-arrow-left"></i> Player</a>
   </div>
 
@@ -268,7 +274,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- Levels -->
     <div class="card c4" id="card-lvl">
-      <div class="ch"><h2><i class="fa-solid fa-gauge-high"></i> Levels</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-gauge-high"></i> Levels</h2><div class="r"><button class="rst" id="r-lvl" title="Reset levels"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <div class="row"><label for="preamp">Pre-amp</label><input type="range" id="preamp" min="-24" max="12" step="0.5" value="0"><span class="v" id="preamp-v">0.0 dB</span></div>
       <div class="row"><label for="balance">Balance</label><input type="range" id="balance" min="-1" max="1" step="0.02" value="0"><span class="v" id="balance-v">C</span></div>
       <div class="row"><label for="width">Width</label><input type="range" id="width" min="0" max="2" step="0.05" value="1"><span class="v" id="width-v">100%</span></div>
@@ -297,7 +303,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- Goniometer -->
     <div class="card c4" id="card-gonio">
-      <div class="ch"><h2><i class="fa-solid fa-circle-nodes"></i> Stereo Field</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-circle-nodes"></i> Stereo Field</h2><div class="r"><button class="rst" id="r-gonio" title="Clear trace"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <canvas id="gonio" class="viz"></canvas>
       <div class="hint">A vertical trace is mono; a wide blob is broad stereo. Leaning left or right shows a channel imbalance.</div>
     </div>
@@ -312,14 +318,14 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- Spectrogram -->
     <div class="card c6" id="card-gram">
-      <div class="ch"><h2><i class="fa-solid fa-fire"></i> Spectrogram</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-fire"></i> Spectrogram</h2><div class="r"><button class="rst" id="r-gram" title="Clear"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <canvas id="gram" class="viz"></canvas>
       <div class="hint">Time scrolls right to left, pitch runs bottom to top. A hard horizontal edge near the top is the lossy-codec cutoff — lossless files run right to the ceiling.</div>
     </div>
 
     <!-- Presets -->
     <div class="card c6" id="card-preset">
-      <div class="ch"><h2><i class="fa-solid fa-bookmark"></i> Presets</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-bookmark"></i> Presets</h2><div class="r"><button class="rst" id="r-presets" title="Delete all your saved presets"><i class="fa-solid fa-trash"></i></button></div></div>
       <div class="plist" id="p-built"></div>
       <div class="ch" style="margin:.8rem 0 .5rem"><h2 style="font-size:.58rem">Yours</h2></div>
       <div class="plist" id="p-mine"></div>
@@ -336,7 +342,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- AutoEq -->
     <div class="card c6" id="card-autoeq">
-      <div class="ch"><h2><i class="fa-solid fa-headphones"></i> Headphone Correction</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-headphones"></i> Headphone Correction</h2><div class="r"><button class="rst" id="r-aeq" title="Clear the box and flatten"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <textarea id="aeq" placeholder="Paste an AutoEq ParametricEQ.txt here:&#10;&#10;Preamp: -6.2 dB&#10;Filter 1: ON PK Fc 105 Hz Gain 4.1 dB Q 0.70&#10;Filter 2: ON PK Fc 2200 Hz Gain -3.4 dB Q 1.20"></textarea>
       <div class="row" style="margin-top:.5rem;gap:.4rem">
         <button class="mini p" id="aeq-apply" style="flex:1">Apply</button>
@@ -348,7 +354,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
     <!-- Convolution -->
     <div class="card c6" id="card-conv">
       <div class="ch"><h2><i class="fa-solid fa-diagram-project"></i> Convolution</h2>
-        <div class="r"><button class="sw sm" id="sw-conv" role="switch"></button></div>
+        <div class="r"><button class="rst" id="r-conv" title="Unload impulse response"><i class="fa-solid fa-rotate-left"></i></button><button class="sw sm" id="sw-conv" role="switch"></button></div>
       </div>
       <input type="file" id="ir-file" accept="audio/*" style="display:none">
       <button class="mini" id="ir-pick" style="width:100%"><i class="fa-solid fa-folder-open"></i> Load impulse response</button>
@@ -357,7 +363,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- Output -->
     <div class="card c6" id="card-out">
-      <div class="ch"><h2><i class="fa-solid fa-plug"></i> Output</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-plug"></i> Output</h2><div class="r"><button class="rst" id="r-out" title="Back to defaults"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <div class="row"><label>Device</label><select id="sink"><option value="">System default</option></select></div>
       <div class="row"><label>Rate</label><select id="rate">
         <option value="0">Device default</option>
@@ -378,7 +384,7 @@ canvas.viz{width:100%;display:block;border-radius:11px;background:rgba(0,0,0,.3)
 
     <!-- Utilities -->
     <div class="card c6" id="card-util">
-      <div class="ch"><h2><i class="fa-solid fa-toolbox"></i> Utilities</h2></div>
+      <div class="ch"><h2><i class="fa-solid fa-toolbox"></i> Utilities</h2><div class="r"><button class="rst" id="r-util" title="Reset utilities"><i class="fa-solid fa-rotate-left"></i></button></div></div>
       <div class="row"><label for="speed">Speed</label><input type="range" id="speed" min="0.5" max="1.5" step="0.05" value="1"><span class="v" id="speed-v">1.00×</span></div>
       <div class="row"><label>Sleep</label><select id="sleep" style="flex:1">
         <option value="0">Off</option><option value="10">10 min</option><option value="20">20 min</option>
@@ -1485,6 +1491,116 @@ abBtn.addEventListener('pointerdown',abDown);
 abBtn.addEventListener('pointerup',abUp);
 abBtn.addEventListener('pointerleave',abUp);
 abBtn.addEventListener('pointercancel',abUp);
+
+/* ============================================================
+   RESETS
+
+   Each card can be put back to its own default without touching
+   anything else, so one messed-up section doesn't cost you the
+   rest of your setup. The header button resets everything.
+   ============================================================ */
+const DEF = { preamp:0, balance:0, width:1, xfeed:0, limOn:false, speed:1 };
+
+$('r-lvl').onclick = () => {
+  preamp=DEF.preamp; balance=DEF.balance; width=DEF.width; xfeed=DEF.xfeed; limOn=DEF.limOn;
+  syncLevelUI(); wireIfBuilt(); applyAll(); saveSettings();
+  toast('Levels reset');
+};
+
+$('r-gonio').onclick = () => {
+  goPts = new Float32Array(0);
+  const r=gon.getBoundingClientRect();
+  gnx.clearRect(0,0,r.width,r.height);
+  if(nMeter) nMeter.port.postMessage('reset');
+  toast('Trace cleared');
+};
+
+$('r-gram').onclick = () => {
+  gramReady = false;
+  const r=gram.getBoundingClientRect();
+  gx.fillStyle='#07070a'; gx.fillRect(0,0,r.width,r.height);
+  toast('Spectrogram cleared');
+};
+
+$('r-presets').onclick = () => {
+  const n = Object.keys(lsGet(PRESET_KEY,{})).length;
+  if(!n){ toast('Nothing saved to delete'); return; }
+  if(!confirm(`Delete all ${n} of your saved presets?\n\nThis cannot be undone — export them first if you want a copy.`)) return;
+  lsSet(PRESET_KEY,{});
+  renderPresets();
+  toast(`Deleted ${n} preset${n===1?'':'s'}`);
+};
+
+$('r-aeq').onclick = () => {
+  $('aeq').value = '';
+  const w = $('aeq-warn'); if(w) w.remove();
+  eq.forEach(b=>{ b.g=0; });
+  eq.forEach((b,i)=>{ b.q = EQ_DEFAULT[i].q; });
+  preamp = 0;
+  syncAllBands(); syncLevelUI(); applyAll(); saveSettings();
+  toast('Correction cleared, bands flat');
+};
+
+$('r-conv').onclick = () => {
+  irBuffer = null; convOn = false;
+  $('sw-conv').classList.remove('on');
+  $('ir-file').value = '';
+  $('ir-info').classList.remove('w');
+  $('ir-info').textContent = 'None loaded. Any WAV/FLAC impulse response works — room correction from REW, a headphone IR, or a speaker cabinet model.';
+  if(built){ try{ nConv.buffer = null; }catch(e){} wire(); applyAll(); }
+  saveSettings();
+  toast('Impulse response unloaded');
+};
+
+$('r-out').onclick = async () => {
+  $('sink').value = ''; $('rate').value = '0'; $('lhint').value = 'playback';
+  if(au.setSinkId){ try{ await au.setSinkId(''); }catch(e){} }
+  saveSettings();
+  toast(built ? 'Defaults set — reload to apply rate and buffer' : 'Output defaults restored');
+};
+
+$('r-util').onclick = async () => {
+  au.playbackRate = DEF.speed;
+  $('speed').value = DEF.speed;
+  $('speed-v').textContent = '1.00×';
+
+  clearInterval(sleepTimer); sleepTimer=null; sleepEOT=false;
+  $('sleep').value='0'; $('sleep-v').textContent='—';
+  if(nOut) nOut.gain.value = 1;
+
+  if(wakeLock){ try{ await wakeLock.release(); }catch(e){} wakeLock=null; }
+  $('sw-wake').classList.remove('on');
+  if('wakeLock' in navigator) $('wake-v').textContent='off';
+
+  $('sw-midi').classList.remove('on');
+  if(navigator.requestMIDIAccess) $('midi-v').textContent='off';
+
+  toast('Utilities reset');
+};
+
+$('btn-reset-all').onclick = async () => {
+  if(!confirm('Put every control back to default?\n\nYour saved presets are kept — only the current settings are reset.')) return;
+
+  eq = EQ_DEFAULT.map(b=>({...b}));
+  preamp=DEF.preamp; balance=DEF.balance; width=DEF.width; xfeed=DEF.xfeed; limOn=DEF.limOn;
+  abBypass = false;
+
+  $('r-conv').onclick();
+  await $('r-util').onclick();
+  $('r-aeq').onclick();
+  $('r-gram').onclick();
+  $('r-gonio').onclick();
+
+  $('bands').classList.remove('showq');
+  $('eq-q').classList.remove('on'); $('eq-q').textContent='Show Q';
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  abxTrials=abxHits=0; abxX=null;
+  $('abx-score').textContent='0 / 0'; $('abx-note').textContent='';
+  markAbx('');
+
+  syncAllBands(); syncLevelUI(); wireIfBuilt(); applyAll(); saveSettings();
+  toast('Everything back to default','ok');
+};
 
 /* ============================================================
    SETTINGS PERSISTENCE
