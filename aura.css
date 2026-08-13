@@ -54,7 +54,7 @@ body{
   /* Sits just above the dock so the curve reads as a horizon line
      rather than something hidden behind the player. */
   position:fixed;left:0;right:0;bottom:13.5rem;z-index:-2;width:100%;height:36%;
-  opacity:.46;filter:blur(.7px);pointer-events:none;
+  opacity:.92;filter:blur(.4px);pointer-events:none;
   transition:opacity .5s ease
 }
 #dust{
@@ -440,7 +440,7 @@ textarea{
   #np-art{width:104px;height:104px;border-radius:12px}
   #np-img{border-radius:11px}
   #dust{opacity:.4}
-  #ambient{bottom:20rem;height:26%;opacity:.34}
+  #ambient{bottom:20rem;height:26%;opacity:.8}
   #dock{align-items:center}
   #mid{padding-top:0}
   #vol{display:none}
